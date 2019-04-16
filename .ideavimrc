@@ -1,0 +1,204 @@
+".ideavimrc file by garrett deZeeuw {{{1
+set timeout ttimeoutlen=400
+set clipboard=unnamed            "Use system clipboard when yanking
+set virtualedit=all              "Allow cursor to move into empty space
+set sidescrolloff=16
+set sidescroll=8
+set incsearch
+set hlsearch
+set ignorecase
+set smartcase
+set showmode
+set number
+set surround
+let mapleader = " "
+
+" {{{1 ===== Normal mode commands (no leader key) =====
+
+" 'Go-to' mappings
+nnoremap gi              :action GotoImplementation<CR>
+nnoremap gD              :action GotoSuperMethod<CR>
+nnoremap gs              :action GotoSuperMethod<CR>
+nnoremap gt              :action GotoTypeDeclaration<CR>
+nnoremap gth             :action TypeHierarchy<CR>
+nnoremap gu              :action ShowUsages<CR>
+nnoremap gch             :action CallHierarchy<CR>
+
+"Next method/Previous method
+nnoremap [[ :action MethodUp<CR>
+nnoremap ]] :action MethodDown<CR>
+
+" }}}1 =====      Leader key mappings for IDE     ===== {{{1
+nnoremap <leader><space> :action HideAllWindows<CR>
+
+nnoremap <Leader>q       :action QuickJavaDoc<CR>
+nnoremap <Leader>W       :action com.mnw.tabmover.actions.MoveTabToNewWindow<CR>
+nnoremap <Leader>w       :action com.mnw.tabmover.actions.MoveTabToNextSplitter<CR>
+nnoremap <Leader>e       :action RecentChangedFiles<CR>
+nnoremap <Leader>r       :action RecentFiles<CR>
+nnoremap <Leader>t       :action GotoTest<CR>
+nnoremap <Leader>T       :action ShowRecentTests<CR>
+
+nnoremap <Leader>y       :action ShowErrorDescription<CR>
+nnoremap <Leader>u       :action ShowUsages<CR>
+nnoremap <Leader>i       :action QuickImplementations<CR>
+nnoremap <Leader>o       :action FileStructurePopup<CR>
+nnoremap <Leader>p       :action ToggleInlineHintsAction<CR>
+
+nnoremap <Leader>a       :action GotoAction<CR>
+vnoremap <Leader>a       :action GotoAction<CR>
+nnoremap <Leader>s       :action FileStructurePopup<CR>
+nnoremap <Leader>d       :action QuickImplementations<CR>
+nnoremap <Leader>f       :action FindInPath<CR>
+nnoremap <Leader>g       :action SearchEverywhere<CR>
+
+nnoremap <Leader>h       :action com.mnw.tabmover.actions.MoveFocusToPreviousWindow<CR>
+nnoremap <Leader>k       :action Back<CR>
+nnoremap <Leader>j       :action Forward<CR>
+nnoremap <Leader>l       :action com.mnw.tabmover.actions.MoveFocusToNextWindow<CR>
+
+nnoremap <Leader>v       :action QuickEvaluateExpression<CR>
+vnoremap <Leader>v       :action QuickEvaluateExpression<CR>
+nnoremap <Leader>V       :action EvaluateExpression<CR>
+nnoremap <Leader>b       :action ToggleLineBreakpoint<CR>
+nnoremap <Leader>B       :action ToggleBreakpointEnabled<CR>
+nnoremap <Leader><a-b>   :action EditBreakpoint<CR>
+
+nnoremap <Leader>m       :action CloseEditor<CR>
+nnoremap <Leader>M       :action ReopenClosedTab<CR>
+nnoremap <Leader>,       :action PreviousTab<CR>
+nnoremap <Leader>.       :action NextTab<CR>
+
+
+" }}}1 =====            Debug related             ===== {{{1
+"nnoremap <Leader>i       :action StepInto<CR>
+"nnoremap <Leader>o       :action StepOver<CR>
+"nnoremap <Leader>O       :action StepOut<CR>
+"nnoremap <Leader>R       :action RunToCursor<CR>
+
+nnoremap <Leader><c-d>   :action DebugClass<CR>
+nnoremap <Leader><c-r>   :action RunClass<CR>
+nnoremap <Leader><a-d>   :action ChooseDebugConfiguration<CR>
+nnoremap <Leader><a-r>   :action ChooseRunConfiguration<CR>
+
+
+" }}}1 =====   Tab and window switching/moving    ===== {{{1
+nnoremap <a-,>     :action com.mnw.tabmover.actions.MoveTabUpAction<CR>
+nnoremap <a-.>     :action com.mnw.tabmover.actions.MoveTabDownAction<CR>
+"nnoremap <c-s-,>   :action com.mnw.tabmover.actions.MoveTabToPreviousSplitter<CR> Had to implement these 
+"nnoremap <c-s-.>   :action com.mnw.tabmover.actions.MoveTabToNextSplitter<CR>     with IDEshortcuts 
+
+"Right-side leader key: \
+nnoremap \an       :action Annotate<CR>
+nnoremap \cao      :action CloseAllEditorsButActive<CR>
+nnoremap \gl       :action CodeGlance.toggle<CR>
+nnoremap \h        :action Vcs.ShowTabbedFileHistory<CR>
+nnoremap \lh       :action LocalHistory.ShowHistory<CR>
+nnoremap \us       :action Unsplit<CR>
+nnoremap \wr       :action EditorToggleUseSoftWraps<CR>
+nnoremap \ws       :action EditorToggleShowWhitespaces<CR>
+nnoremap \oim      :action OptimizeImports<CR>
+nnoremap \str      :action StreamTracerAction<CR>
+
+"Tool window mappings (don't work yet)
+"nnoremap \v              :action ActivateVersionControlToolWindow<CR>
+"nnoremap \g              :action ActivateGradleToolWindow<CR>
+"nnoremap \t              :action ActivateTerminalToolWindow<CR>
+"nnoremap \d              :action ActivateDebugToolWindow<CR>
+"nnoremap \r              :action ActivateRunToolWindow<CR>
+
+"}}}1 =====      Other VIM-related mappings      ===== {{{1
+
+"Make semi-colon useful
+nnoremap ; :
+nnoremap : ;
+vnoremap ; :
+vnoremap : ;
+vnoremap m <Esc>
+
+
+"So many ways to leave insert mode! and other insert mode fun
+nnoremap <C-[>  <Esc>
+inoremap jk     <Esc>l
+inoremap <Esc>  <Esc>l
+
+"Scroll the screen without moving cursor using Alt+hjkl
+nnoremap <a-h> 8zh
+nnoremap <a-j> <c-e>
+nnoremap <a-k> <c-y>
+nnoremap <a-l> 8zl
+
+"Remap ctrl+move keys to move between windows/splits
+nnoremap <c-h>       :action com.mnw.tabmover.actions.MoveFocusToPreviousWindow<CR>
+nnoremap <c-l>       :action com.mnw.tabmover.actions.MoveFocusToNextWindow<CR>
+
+"Remap move keys to faciliate moving up/down on wrapped lines
+nnoremap j  gj
+nnoremap k  gk
+
+"When in visual mode, delete/paste without yanking the overwritten selection (use 'x' for that)
+vnoremap d "dd
+
+"Windows-style cut/copy/paste
+nnoremap <C-i> <C-a>
+nnoremap <C-S-i> <C-x>
+nnoremap <C-o> <C-x>
+nnoremap <c-a> ggVG
+vnoremap <c-x> d
+vnoremap <c-c> y
+vnoremap <c-v> <Esc>:set paste<CR>P:set nopaste<CR>gv
+inoremap <c-v> <Esc>:set paste<CR>P:set nopaste<CR>a
+
+"Make U the opposite of u - redo.
+"Ctrl+R to 'R'eset the line to its state before last edit
+nnoremap U <c-r>
+nnoremap <c-r> U
+
+"Clear search highlighting
+nnoremap <Leader>c :nohl<CR>
+
+"Indent/un-indent line or selection
+nnoremap >> :action EditorIndentLineOrSelection<CR>
+nnoremap << :action EditorUnindentSelection<CR>
+vnoremap >> >gv
+vnoremap << <gv
+
+"Enter visual block mode
+nnoremap vv <C-V>
+
+"New blank line below/above
+nnoremap <silent> [<space> mzO<ESC>`z
+nnoremap <silent> ]<space> mzo<ESC>`z
+
+"Reformat with ==
+nnoremap == :action ReformatCode<CR>
+vnoremap == :action ReformatCode<CR>
+
+"Adjust font sizes
+nnoremap <c--> :action EditorDecreaseFontSize<CR>
+nnoremap <c-=> :action EditorIncreaseFontSize<CR>
+
+"}}}1
+"{{{1Issues:
+"
+" Visual selection '> end of selection mark does not work
+"
+" Marks do not always correctly follow lines when new lines are
+" added and removed.  Noticed with my Alt+0 mapping which tries to
+" insert a blank line above but has trouble returning to the original
+" position.
+"
+" virtualedit does not work. want to implement.
+"
+" relativenumber collides with Annotate.  relativenumber must be disabled before annotate will show
+
+"It seems that when using a multi-keystroke mapping, the last key of the mapping is passed to the editor as normal input.
+"I see this when using <leader>wr to turn on wrap - the next character I type causes ideaVIM to execute replace-character at my cursor on my next keystroke -
+"i.e. it was using 'r' as the start of the replace-character command.  This seems to be repeatable.
+"I also see this when using ctrl+; 'r' to invoke the 'resolve' operation.  there's an 'R' sitting in the window as though it was waiting to search.
+"Just had another thing - pressent <leader>g did not perform the action it should have.  pressing <leader>gg triggered the action I wanted from a single
+"keypress.
+"Just happened again for <leader>w.  the second 'w' triggers the action. only seems to happen when there are additional multi-character mappings that begin with
+"the same letter. i.e. i have <leader>ws and <leader>wr.
+
+"}}}1

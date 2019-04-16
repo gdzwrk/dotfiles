@@ -1,0 +1,10 @@
+#^X ^R to reload .inputrc configuration
+
+set show-all-if-ambiguous on
+set menu-complete-display-prefix on
+set completion-ignore-case on
+"\t": menu-complete
+"\e[Z": menu-complete-backward
+
+"\e[5~": history-search-backward
+"\e[6~": history-search-forward
