@@ -39,7 +39,6 @@ nnoremap <Leader>r       :action RecentFiles<CR>
 nnoremap <Leader>t       :action GotoTest<CR>
 nnoremap <Leader>T       :action ShowRecentTests<CR>
 
-nnoremap <Leader>y       :action ShowErrorDescription<CR>
 nnoremap <Leader>u       :action ShowUsages<CR>
 nnoremap <Leader>i       :action QuickImplementations<CR>
 nnoremap <Leader>o       :action FileStructurePopup<CR>
@@ -52,10 +51,8 @@ nnoremap <Leader>d       :action QuickImplementations<CR>
 nnoremap <Leader>f       :action FindInPath<CR>
 nnoremap <Leader>g       :action SearchEverywhere<CR>
 
-nnoremap <Leader>h       :action com.mnw.tabmover.actions.MoveFocusToPreviousWindow<CR>
-nnoremap <Leader>k       :action Back<CR>
 nnoremap <Leader>j       :action Forward<CR>
-nnoremap <Leader>l       :action com.mnw.tabmover.actions.MoveFocusToNextWindow<CR>
+nnoremap <Leader>k       :action Back<CR>
 
 nnoremap <Leader>v       :action QuickEvaluateExpression<CR>
 vnoremap <Leader>v       :action QuickEvaluateExpression<CR>
@@ -85,12 +82,12 @@ nnoremap <Leader><a-r>   :action ChooseRunConfiguration<CR>
 " }}}1 =====   Tab and window switching/moving    ===== {{{1
 nnoremap <a-,>     :action com.mnw.tabmover.actions.MoveTabUpAction<CR>
 nnoremap <a-.>     :action com.mnw.tabmover.actions.MoveTabDownAction<CR>
-"nnoremap <c-s-,>   :action com.mnw.tabmover.actions.MoveTabToPreviousSplitter<CR> Had to implement these 
-"nnoremap <c-s-.>   :action com.mnw.tabmover.actions.MoveTabToNextSplitter<CR>     with IDEshortcuts 
 
 "Right-side leader key: \
 nnoremap \an       :action Annotate<CR>
 nnoremap \cao      :action CloseAllEditorsButActive<CR>
+nnoremap \cl       :action CloseAllToTheLeft<CR>
+nnoremap \cr       :action CloseAllToTheRight<CR>
 nnoremap \gl       :action CodeGlance.toggle<CR>
 nnoremap \h        :action Vcs.ShowTabbedFileHistory<CR>
 nnoremap \lh       :action LocalHistory.ShowHistory<CR>
@@ -104,7 +101,7 @@ nnoremap \str      :action StreamTracerAction<CR>
 "nnoremap \v              :action ActivateVersionControlToolWindow<CR>
 "nnoremap \g              :action ActivateGradleToolWindow<CR>
 "nnoremap \t              :action ActivateTerminalToolWindow<CR>
-"nnoremap \d              :action ActivateDebugToolWindow<CR>
+nnoremap \d              :action ActivateDebugToolWindow<CR>
 "nnoremap \r              :action ActivateRunToolWindow<CR>
 
 "}}}1 =====      Other VIM-related mappings      ===== {{{1
