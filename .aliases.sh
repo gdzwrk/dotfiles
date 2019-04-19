@@ -9,9 +9,6 @@ gvimr () { command gvim --R --remote-tab-silent "$@" & }
 excel()  { command /c/Program\ Files/Microsoft\ Office/root/Office16/EXCEL.exe "$@" & }
 word()   { command /c/Program\ File/Microsoft\ Office/root/Office16/WINWORD.EXE "$@" & }
 
-#Invoke Python from git bash
-alias 'python'='winpty python.exe'
-
 #Change directory using wslpath
 cdw () {
     cd "$(wslpath $1)"
