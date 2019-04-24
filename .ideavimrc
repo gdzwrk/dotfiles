@@ -96,6 +96,8 @@ nnoremap \wr       :action EditorToggleUseSoftWraps<CR>
 nnoremap \ws       :action EditorToggleShowWhitespaces<CR>
 nnoremap \oim      :action OptimizeImports<CR>
 nnoremap \str      :action StreamTracerAction<CR>
+nnoremap \i        <c-a>
+nnoremap \d        <c-x>
 
 "Tool window mappings (don't work yet)
 "nnoremap \v              :action ActivateVersionControlToolWindow<CR>
@@ -137,9 +139,7 @@ nnoremap k  gk
 vnoremap d "dd
 
 "Windows-style cut/copy/paste
-nnoremap <C-i> <C-a>
 nnoremap <C-S-i> <C-x>
-nnoremap <C-o> <C-x>
 nnoremap <c-a> ggVG
 vnoremap <c-x> d
 vnoremap <c-c> y
@@ -159,6 +159,7 @@ nnoremap >> :action EditorIndentLineOrSelection<CR>
 nnoremap << :action EditorUnindentSelection<CR>
 vnoremap >> >gv
 vnoremap << <gv
+vnoremap <Tab> >gv
 
 "Enter visual block mode
 nnoremap vv <C-V>

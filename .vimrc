@@ -57,8 +57,12 @@ set relativenumber                  "Use relative line numbering
 set number                          "Show line number
 
 " Change cursor when in insert mode
-let &t_SI.="\<Esc>[6 q"
-let &t_SI.="\<Esc>[2 q"
+"let &t_SI.="\<Esc>[6 q"
+"let &t_SI.="\<Esc>[2 q"
+let &t_ti.="\e[1 q"
+let &t_SI.="\e[5 q"
+let &t_EI.="\e[1 q"
+let &t_te.="\e[0 q"
 "}}}1
 
 "##### General key mapping ##### {{{1
@@ -115,6 +119,8 @@ nnoremap vv <C-v>
 "Windows habits die hard
 nnoremap <Leader>a <C-a>
 nnoremap <Leader>x <C-x>
+nnoremap \a <C-a>
+nnoremap \x <C-x>
 nnoremap <C-a> ggVG
 nnoremap <silent> <C-v> :set paste<CR>P:set nopaste<CR>
 vnoremap <C-x> x

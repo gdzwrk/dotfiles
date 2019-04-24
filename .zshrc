@@ -162,6 +162,12 @@ unsetopt BG_NICE
 # Load fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+# Load zsh-specific aliases and scripts
+unalias gf
+unalias gb
+unalias gr
+[ -f ~/.gdzsh ] && source ~/.gdzsh
+
 # Set dircolors
 eval "$(dircolors ~/.dircolors)"
 

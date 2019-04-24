@@ -68,8 +68,16 @@ fi
 #    cd ~
 #fi
 
+# FZF completion for git things
+bind '"\er": redraw-current-line'
+bind '"\C-g\C-f": "$(gf)\e\C-e\er"'
+bind '"\C-g\C-b": "$(gb)\e\C-e\er"'
+bind '"\C-g\C-t": "$(gt)\e\C-e\er"'
+bind '"\C-g\C-h": "$(gh)\e\C-e\er"'
+bind '"\C-g\C-r": "$(gr)\e\C-e\er"'
 
+# FZF for lyfe
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
-
+# Bring in my common aliases
 [ -f ~/.aliases.sh ] && source ~/.aliases.sh
