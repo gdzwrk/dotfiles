@@ -135,7 +135,6 @@ nnoremap <A-p> $p
 
 "When in visual mode, delete/paste without yanking the overwritten selection (use 'x' for that)
 vnoremap p "_dP
-vnoremap P "_dP
 vnoremap d "dd
 
 "Return to original position after yanking
@@ -322,6 +321,7 @@ command! Eiv  :vsp ~/.ideavimrc
 command! Eb   :vsp ~/.bashrc
 command! Ev   :vsp $MYVIMRC
 command! Sv   :so $MYVIMRC
+nnoremap <silent> <F12> :Sv<CR>:echom "Reloaded ~/.vimrc"<CR>
 
 "Random assorted miscellaneous commands
 command! Wsession mksession! ~/.vim/session.vim | echom "Wrote  ~/.vim/session.vim"
@@ -391,13 +391,13 @@ if !exists("g:showNotes")
     endfun
 endif
 
-nnoremap <F12> :call DebugHideOrClose()<CR>
-fun! DebugHideOrClose()
-    let buffer_count  = len(getbufinfo({'buflisted':1}))
-    let tabpage_count = tabpagenr('$')
-    let window_count  = winnr('$')
-    echom "tab count: " . l:tabpage_count . "  window count: " . l:window_count . "  buffer count: " . l:buffer_count
-endfun
+"nnoremap <F12> :call DebugHideOrClose()<CR>
+"fun! DebugHideOrClose()
+"    let buffer_count  = len(getbufinfo({'buflisted':1}))
+"    let tabpage_count = tabpagenr('$')
+"    let window_count  = winnr('$')
+"    echom "tab count: " . l:tabpage_count . "  window count: " . l:window_count . "  buffer count: " . l:buffer_count
+"endfun
 
 fun! HideOrCloseBuffer()
     let buffer_count  = len(getbufinfo({'buflisted':1}))
@@ -458,16 +458,31 @@ function! s:Dec2hex(line1, line2, arg) range
     endif
 endfunction
 
+command! -range Fps     <line1>,<line2>call FormatPreparedStatement()
 fun! FormatPreparedStatement()
-    let sqlPattern = '^\(\A\{23}\).\{-}\[\(.\{-}\)\].*Executing Prepared SQL: \[\(.\{-}\)\] with parameters \[\(.\{-}\)\].*$'
+    let sqlPattern = '^.*Executing Prepared SQL: \[\(.\{-}\)\] with parameters \[\(.\{-}\)\]$'
 
-    let tstamp = matchlist(getline('.'), sqlPattern)[1]
-    let caller = matchlist(getline('.'), sqlPattern)[2]
-    let sql    = matchlist(getline('.'), sqlPattern)[3]
-    let params = matchlist(getline('.'), sqlPattern)[4]
+    let sqlString   = matchlist(getline('.'), sqlPattern)[1]
+    let paramString = matchlist(getline('.'), sqlPattern)[2]
 
-    echo "Timestamp: ".tstamp."'\nCaller: '".caller."'\nSql: '".sql."'\nParams: '".params."'"
-    let @s = sql
+    norm! I--ok
+
+    let params = split(paramString, ",")
+
+    for param in params
+        let param = trim(param)
+        if param =~# '\v^\d+$'
+            let sqlString = substitute(sqlString, '?', param, "")
+        else
+            let sqlString = substitute(sqlString, '?', "'" . param . "'", "")
+        endif
+    endfor
+
+    put =sqlString
+
+    call SQLUtilities#SQLU_Formatter(getline('.'))
+
+    let @s = sqlString
 endfun
 
 command! -nargs=? -range Hex2dec call s:Hex2dec(<line1>, <line2>, '<args>')

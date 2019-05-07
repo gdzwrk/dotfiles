@@ -28,6 +28,7 @@ mkcd () {
 
 alias 'cdcl'='cdw "$(powershell.exe get-clipboard)"'
 alias 'cd..'='cd ..'
+alias 'less'='less -FX'
 
 #Change default ls options to -lha
 alias 'ls'='ls --color'

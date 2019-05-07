@@ -1,5 +1,5 @@
 ".ideavimrc file by garrett deZeeuw {{{1
-set timeout ttimeoutlen=400
+set timeout ttimeoutlen=500
 set clipboard=unnamed            "Use system clipboard when yanking
 set virtualedit=all              "Allow cursor to move into empty space
 set sidescrolloff=16
@@ -10,6 +10,7 @@ set ignorecase
 set smartcase
 set showmode
 set number
+set relativenumber
 set surround
 let mapleader = " "
 
@@ -24,6 +25,9 @@ nnoremap gth             :action TypeHierarchy<CR>
 nnoremap gu              :action ShowUsages<CR>
 nnoremap gch             :action CallHierarchy<CR>
 
+nnoremap g$              :action GoToLastTab<CR>
+nnoremap g0              :action GoToTab1<CR>
+
 "Next method/Previous method
 nnoremap [[ :action MethodUp<CR>
 nnoremap ]] :action MethodDown<CR>
@@ -31,7 +35,6 @@ nnoremap ]] :action MethodDown<CR>
 " }}}1 =====      Leader key mappings for IDE     ===== {{{1
 nnoremap <leader><space> :action HideAllWindows<CR>
 
-nnoremap <Leader>q       :action QuickJavaDoc<CR>
 nnoremap <Leader>W       :action com.mnw.tabmover.actions.MoveTabToNewWindow<CR>
 nnoremap <Leader>w       :action com.mnw.tabmover.actions.MoveTabToNextSplitter<CR>
 nnoremap <Leader>e       :action RecentChangedFiles<CR>
@@ -39,7 +42,8 @@ nnoremap <Leader>r       :action RecentFiles<CR>
 nnoremap <Leader>t       :action GotoTest<CR>
 nnoremap <Leader>T       :action ShowRecentTests<CR>
 
-nnoremap <Leader>u       :action ShowUsages<CR>
+nnoremap <Leader>y       :action QuickJavaDoc<CR>
+"nnoremap <Leader>u       :action ShowUsages<CR>
 nnoremap <Leader>i       :action QuickImplementations<CR>
 nnoremap <Leader>o       :action FileStructurePopup<CR>
 nnoremap <Leader>p       :action ToggleInlineHintsAction<CR>
@@ -85,17 +89,26 @@ nnoremap <a-.>     :action com.mnw.tabmover.actions.MoveTabDownAction<CR>
 
 "Right-side leader key: \
 nnoremap \an       :action Annotate<CR>
+nnoremap \rn       :set relativenumber!<CR>
+nnoremap \nu       :action EditorToggleShowLineNumbers<CR>
+
+nnoremap \us       :action Unsplit<CR>
+nnoremap \vs       :vsp<CR>
+nnoremap \sp       :sp<CR>
+
 nnoremap \cao      :action CloseAllEditorsButActive<CR>
 nnoremap \cl       :action CloseAllToTheLeft<CR>
 nnoremap \cr       :action CloseAllToTheRight<CR>
+
 nnoremap \gl       :action CodeGlance.toggle<CR>
-nnoremap \h        :action Vcs.ShowTabbedFileHistory<CR>
-nnoremap \lh       :action LocalHistory.ShowHistory<CR>
-nnoremap \us       :action Unsplit<CR>
 nnoremap \wr       :action EditorToggleUseSoftWraps<CR>
 nnoremap \ws       :action EditorToggleShowWhitespaces<CR>
+
+nnoremap \h        :action Vcs.ShowTabbedFileHistory<CR>
+nnoremap \lh       :action LocalHistory.ShowHistory<CR>
 nnoremap \oim      :action OptimizeImports<CR>
 nnoremap \str      :action StreamTracerAction<CR>
+
 nnoremap \i        <c-a>
 nnoremap \d        <c-x>
 

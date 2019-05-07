@@ -94,6 +94,7 @@ return
     }
     skip_bracket := 0
     caps_other_key_pressed = 0
+    pressed_twice_flag := 0
 return
 
 ;;;;; Caps + hjkl - VIM-all-the-things!!! {{{2
@@ -110,6 +111,7 @@ return
         Send {Left}
     }
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
 return
 
 ~CapsLock & j::
@@ -125,6 +127,7 @@ return
         Send {Down}
     }
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
 return
 
 ~CapsLock & k::
@@ -140,6 +143,7 @@ return
         Send {Up}
     }
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
 return
 
 ~CapsLock & l::
@@ -155,6 +159,7 @@ return
         Send {Right}
     }
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
 return
 
 ~CapsLock & Up::
@@ -166,6 +171,7 @@ return
         Send {PgUp}
     }
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
 return
 
 ~CapsLock & Down::
@@ -177,6 +183,7 @@ return
         Send {PgDn}
     }
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
 return
 
 ~CapsLock & Left::
@@ -194,6 +201,7 @@ return
         Send {Home}
     }
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
 return
 
 ~CapsLock & Right::
@@ -211,6 +219,7 @@ return
         Send {End}
     }
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
 return
 
 ~CapsLock & [::
@@ -218,21 +227,25 @@ return
 ^[::
     Send {Esc}
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
 return
 
 ~CapsLock & '::
     Send {AppsKey}
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
 return
 
 ~CapsLock & `;::
     Send {Tab}
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
 return
 
 ~CapsLock & /::
     Send +{Tab}
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
 return
 ;;;;; }}}2
 
@@ -245,6 +258,7 @@ return
     Send, {F9}
     Send, {Shift up}{Ctrl up}{LAlt up}
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
 return
 
 ~CapsLock & z::    ; Close window
@@ -254,6 +268,7 @@ return
     SetCapsLockState, Off
     Send !{F4}
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
 return
 
 ~CapsLock & x::    ; Maximize window
@@ -273,6 +288,7 @@ return
     Else
         WinMaximize A
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
 return
 
 ~Shift & Del::     ; Minimize window
@@ -285,6 +301,7 @@ return
         WinMinimize, A
     }
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
 return
 
 
@@ -295,6 +312,7 @@ return
 ~CapsLock & 4::     ; Open 4t minimizer
     Send !+^{F4}
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
 return
 
 ~CapsLock & ,::    ; Move window to prev display
@@ -302,6 +320,7 @@ return
     SetCapsLockState, Off
     Send #+{Left}
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
 return
 
 
@@ -310,6 +329,7 @@ return
     SetCapsLockState, Off
     Send #+{Right}
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
 return
 
 ~CapsLock & F9::   ; Move window to main monitor, center, 75%
@@ -318,6 +338,7 @@ return
     WinGetActiveStats, active_title, active_width, active_height, active_x, active_y
     WinMove, %active_title%, , 240, 135, 1440, 810
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
 return
 
 ~CapsLock & F10::
@@ -331,6 +352,7 @@ return
     Else
         WinMaximize A
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
 return
 
 ; Maximize window across top two monitors
@@ -366,6 +388,7 @@ return
         ;WinRestore A
     }
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
 return
 
 ; Give info about current window size
@@ -434,6 +457,7 @@ Return
 ~] & Space::
     Send {Alt down}{Ctrl down}{Tab}{Alt up}{Ctrl up}
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
 return
 
 ;;;;; Use VIM navigation in Alt+Tab window
@@ -469,6 +493,7 @@ return
 ~CapsLock & t::
 ~] & t::
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
 
     ; Get executable of current window
     WinGet, curExe, ProcessName, A
@@ -493,6 +518,7 @@ return
 ~CapsLock & g::
 ~] & g::
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
     GroupAdd, gdzMintty, ahk_class mintty
     GroupAdd, gdzMintty, ahk_class ConsoleWindowClass
     GroupAdd, gdzMintty, ahk_class VirtualConsoleClass
@@ -508,7 +534,7 @@ return
 ~CapsLock & v::
 ~] & v::
     caps_other_key_pressed := 1
-    class:="Vim"
+    pressed_twice_flag := 0
     ActivateVim()
 return
 
