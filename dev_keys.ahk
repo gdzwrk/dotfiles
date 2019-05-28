@@ -55,9 +55,11 @@ CapsLock::
 
     if (pressed_twice_flag = 1) {
         pressed_twice_flag := 0
+        caps_other_key_pressed := 0
         Send {Alt down}{Tab}{Alt up}
     } else {
         pressed_twice_flag := 1
+        caps_other_key_pressed := 0
         KeyWait, CapsLock
         SetTimer, ResetPressedTwice, -500
     }
@@ -68,6 +70,7 @@ return
 ResetPressedTwice:
     caps_other_key_pressed := 0
     pressed_twice_flag := 0
+    skip_bracket := 0
 return
 
 ; Add ']' as a right-hand modifier key. Disable it on first press-
@@ -569,7 +572,7 @@ return
     Send ^c
     ActivateVim()
     Sleep 100
-    Send {Esc}{Esc}PGo{Esc}
+    Send {Esc}{Esc}Gp{Esc}
 return
 
 ;;;;; Explorer.exe

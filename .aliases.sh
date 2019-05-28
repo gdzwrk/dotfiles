@@ -26,6 +26,10 @@ mkcd () {
   cd "$1"
 }
 
+start () {
+    powershell.exe -c "start $1"
+}
+
 alias 'cdcl'='cdw "$(powershell.exe get-clipboard)"'
 alias 'cd..'='cd ..'
 alias 'less'='less -FX'

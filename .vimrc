@@ -83,7 +83,7 @@ vnoremap m       <Esc>
 
 "Make semi-colon useful
 nnoremap ; :
-nmap : ;
+nnoremap : ;
 vnoremap ; :
 vnoremap : ;
 
@@ -95,7 +95,7 @@ nnoremap <A-l> 8zl
 vnoremap <A-j> <C-e>
 vnoremap <A-k> <C-y>
 vnoremap <A-h> 8zh
-vnoremap <A-> 8zl
+vnoremap <A-l> 8zl
 
 "Remap move keys to faciliate moving up/down on wrapped lines
 nnoremap j gj
@@ -182,12 +182,9 @@ nnoremap <silent> <C-F9> :set cursorline!<CR>:set cursorcolumn!<CR>
 inoremap <silent> <C-F9> <Esc>:set cursorline!<CR>:set cursorcolumn!<CR>i
 vnoremap <silent> <C-F9> <Esc>:set cursorline!<CR>:set cursorcolumn!<CR>gv
 
-fun! FlashCursor()
-    set cursorline cursorcolumn
-    redraw
-    sleep 500m
-    set nocursorline nocursorcolumn
-endfun
+"Wrap in {noformat} tags
+vnoremap <silent> <leader>wnf <Esc>`<O<Home>{noformat}<Esc>`>o<Home>{noformat}<Esc>gv
+nnoremap <silent> <leader>wnf m`O<Home>{noformat}<Esc>jo<Home>{noformat}<Esc>``
 
 "}}}1
 
@@ -222,6 +219,8 @@ nmap     <Leader>. <Plug>AirlineSelectNextTab
 nnoremap <silent> <Leader>t :tabnew<CR>
 nnoremap <silent> <Leader>n :enew<CR>
 nnoremap <silent> <Leader>m :call HideOrCloseBuffer()<CR>
+nnoremap <silent> <Leader>b :call HideOrCloseBuffer()<CR>
+nnoremap <silent> <Leader>b :Bd<CR>
 
 "Make arrow keys useful for window, buffer & tab management
 nnoremap <Left>             <C-w>h
@@ -312,6 +311,10 @@ inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "<C-k>"
 
 "##### Custom Commands and Functions ##### {{{1
 
+"Mappings to invoke commands below
+nnoremap \dfms :DateFromMs<CR>
+nnoremap \mstd :DateFromMs<CR>
+
 "Change working directory to current file
 command! Cd :cd %:p:h
 
@@ -334,10 +337,8 @@ command! Nomod    :setlocal nomodifiable
 command! Notes    vert topleft sp | vertical resize 50 | setlocal nonumber | edit ~/notes.txt | norm <C-w><C-p>
 command! Logview  vert topleft sp | vertical resize 37 | setlocal nuw=7 | setlocal norelativenumber | setlocal scrollbind | exe ':norm 0<C-w><C-p>' | setlocal scrollbind | exe ':norm 029zl'
 command! Curcolor :echom "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") ."> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"
+command! DateFromMs %s/\v<(\d{10})\d{3}>/\="'".strftime('%c', str2nr(submatch(1)))."'"/g
 
-command! Fcm      :call FormatCommitMessage()
-command! Uwk      :call UnwrapKibana()
-command! Jira     :call FormatJiraThread()
 
 "Bump the statusline up rather than scroll the tabline off the screen
 command! Q        exe 'set cmdheight=3<Bar>redraw<Bar>echo ":q"'    | q   | set cmdheight=1
@@ -375,6 +376,7 @@ function! Sw()
 endfun
 
 "Grab issue number from branch name and put it on the first line
+command! Fcm      :call FormatCommitMessage()
 function! FormatCommitMessage()
     g/^# On branch.*\%[\/]\([A-Z]*-[0-9]*\)/exe "co0"
     1s/^.*\s.\{-}\%[\/]\([a-zA-Z]\+-[0-9]\+\).*$/#\1 /
@@ -417,6 +419,13 @@ fun! HideOrCloseBuffer()
     "Special case for closing the [No Name] buffer from an empty tab?
 endfun
 
+fun! FlashCursor()
+    set cursorline cursorcolumn
+    redraw
+    sleep 500m
+    set nocursorline nocursorcolumn
+endfun
+
 fun! FixKeyMappingCase()
     %s/<\(\a\)-\(\a\)>/<\U\1-\L\2>/g
     %s/<Leader>/<Leader>/gi
@@ -424,6 +433,7 @@ fun! FixKeyMappingCase()
     %s/<Esc>/<Esc>/gi
 endfun
 
+command! Uwk    :call UnwrapKibana()
 fun! UnwrapKibana()
     g!/"message": "/d
     %s/\s\+"message": "\(.*\)"/\1/
@@ -432,6 +442,7 @@ fun! UnwrapKibana()
     sort u
 endfun
 
+command! Jira   :call FormatJiraThread()
 fun! FormatJiraThread()
     g/Permalink/d
     g/From SFDC user/d
@@ -440,6 +451,7 @@ fun! FormatJiraThread()
     norm ggdd
 endfun
 
+nnoremap \d2h :Dec2hex<CR>
 command! -nargs=? -range Dec2hex call s:Dec2hex(<line1>, <line2>, '<args>')
 function! s:Dec2hex(line1, line2, arg) range
     if empty(a:arg)
@@ -458,33 +470,68 @@ function! s:Dec2hex(line1, line2, arg) range
     endif
 endfunction
 
-command! -range Fps     <line1>,<line2>call FormatPreparedStatement()
-fun! FormatPreparedStatement()
-    let sqlPattern = '^.*Executing Prepared SQL: \[\(.\{-}\)\] with parameters \[\(.\{-}\)\]$'
+nnoremap \fps :call FormatPreparedStatement()<CR>
+vnoremap \fps :call FormatPreparedStatement()<CR>
+"command! -range Fps     <line1>,<line2>call FormatPreparedStatement()
+fun! FormatPreparedStatement() range
+    " New approach to try: do a while loop, looping from the last line to the first. 
+    " 'put' and format each as we go along.
+    " This way each successive statement does not push the next one farther down,  
+    " as the line number of the next-higher statement will not move.
 
-    let sqlString   = matchlist(getline('.'), sqlPattern)[1]
-    let paramString = matchlist(getline('.'), sqlPattern)[2]
+    let sqlPattern = '^.*Prepared SQL: \[\(.\{-}\)\] with parameters \[\(.\{-}\)\]$'
 
-    norm! I--ok
+    "echom "firstline: ".a:firstline.", lastline: ".a:lastline
 
-    let params = split(paramString, ",")
+    let curLineNr = a:lastline
+    
+    while curLineNr >= a:firstline
+        let line=getline(curLineNr)
 
-    for param in params
-        let param = trim(param)
-        if param =~# '\v^\d+$'
-            let sqlString = substitute(sqlString, '?', param, "")
-        else
-            let sqlString = substitute(sqlString, '?', "'" . param . "'", "")
+        " Go to the current line number by simply :ex commanding it
+        exe curLineNr
+
+       " Skip line if pattern does not match
+        if match(line, sqlPattern) == -1
+           let curLineNr = curLineNr - 1
+           continue
+            "return
         endif
-    endfor
 
-    put =sqlString
+        let sqlString=""
+        let paramString=""
+        let sqlString   = matchlist(line, sqlPattern)[1]
+        let paramString = matchlist(line, sqlPattern)[2]
 
-    call SQLUtilities#SQLU_Formatter(getline('.'))
+        let params = split(paramString, ",")
 
-    let @s = sqlString
+        "Substitute each parameter into the string.  null or numeric parameters are not wrapped.
+        "All others (string, date) are wrapped in single quotes.
+        for param in params
+            let param = trim(param)
+            if param =~# '\v^\d+$'
+                let sqlString = substitute(sqlString, '?', param, "")
+            elseif param =~# '\v^null$'
+                let sqlString = substitute(sqlString, '?', param, "")
+            else
+                let sqlString = substitute(sqlString, '?', "'" . param . "'", "")
+            endif
+        endfor
+
+        "Comment out the log line and create an empty line below
+        norm! I--ok
+
+        "Place the contents of the variable into the buffer
+        put =sqlString
+
+        "Format the SQL as best we can
+        call SQLUtilities#SQLU_Formatter(getline('.'))
+
+        let curLineNr = curLineNr - 1
+    endwhile
 endfun
 
+nnoremap \h2d :Hex2dec<CR>
 command! -nargs=? -range Hex2dec call s:Hex2dec(<line1>, <line2>, '<args>')
 function! s:Hex2dec(line1, line2, arg) range
     if empty(a:arg)
@@ -502,6 +549,18 @@ function! s:Hex2dec(line1, line2, arg) range
         echo (a:arg =~? '^0x') ? a:arg + 0 : ('0x'.a:arg) + 0
     endif
 endfunction
+
+nnoremap \csb :call CopySearchToNewBuffer()<CR>
+function! CopySearchToNewBuffer()
+    let @n = ''
+    g//yank N
+    enew
+    normal "nPggdd
+    nohl
+endfun
+
+"vnoremap \cb :y<CR> | execute "enew"
+"vnoremap \cb :y | normal enew | P
 "}}}1
 
 "##### Autocommands ##### {{{1
@@ -523,7 +582,8 @@ augroup END
 "Set all *.dbg and *.log files unmodifiable, can be toggled with :Mod and :Nomod
 augroup unmodifiableLogs
     au!
-    autocmd BufRead *.dbg*,*.log* setlocal modifiable | e ++ff=dos | setlocal syntax=logtalk | setlocal nomodifiable
+    "autocmd BufRead *.dbg*,*.log* setlocal modifiable | e ++ff=dos | setlocal syntax=logtalk | setlocal nomodifiable
+    autocmd BufRead *.dbg*,*.log* setlocal modifiable | e ++ff=dos | setlocal nomodifiable
 augroup END
 
 "Set up gitcommit so that it highlights properly inside IntelliJ and command-line vim.

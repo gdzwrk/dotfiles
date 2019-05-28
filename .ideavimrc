@@ -109,6 +109,10 @@ nnoremap \lh       :action LocalHistory.ShowHistory<CR>
 nnoremap \oim      :action OptimizeImports<CR>
 nnoremap \str      :action StreamTracerAction<CR>
 
+"Git related
+nnoremap \cb       :action Git.CompareWithBranch<CR>
+
+"Need these since C-A and C-X are Windows'd.
 nnoremap \i        <c-a>
 nnoremap \d        <c-x>
 
