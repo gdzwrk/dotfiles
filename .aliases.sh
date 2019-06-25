@@ -30,6 +30,9 @@ start () {
     powershell.exe -c "start $1"
 }
 
+# Exclude the 'mine/' directory from my ripgrepping
+alias 'rg'='rg -g "!mine/*"'
+
 alias 'cdcl'='cdw "$(powershell.exe get-clipboard)"'
 alias 'cd..'='cd ..'
 alias 'less'='less -FX'

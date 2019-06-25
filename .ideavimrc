@@ -10,7 +10,7 @@ set ignorecase
 set smartcase
 set showmode
 set number
-set relativenumber
+"set relativenumber
 set surround
 let mapleader = " "
 
@@ -50,10 +50,11 @@ nnoremap <Leader>p       :action ToggleInlineHintsAction<CR>
 
 nnoremap <Leader>a       :action GotoAction<CR>
 vnoremap <Leader>a       :action GotoAction<CR>
-nnoremap <Leader>s       :action FileStructurePopup<CR>
+nnoremap <Leader>s       :action ActivateStructureToolWindow<CR>
 nnoremap <Leader>d       :action QuickImplementations<CR>
 nnoremap <Leader>f       :action FindInPath<CR>
-nnoremap <Leader>g       :action SearchEverywhere<CR>
+nnoremap <Leader>g       :action Generate<CR>
+vnoremap <Leader>g       :action Generate<CR>
 
 nnoremap <Leader>j       :action Forward<CR>
 nnoremap <Leader>k       :action Back<CR>
@@ -108,6 +109,8 @@ nnoremap \h        :action Vcs.ShowTabbedFileHistory<CR>
 nnoremap \lh       :action LocalHistory.ShowHistory<CR>
 nnoremap \oim      :action OptimizeImports<CR>
 nnoremap \str      :action StreamTracerAction<CR>
+
+nnoremap \col      :action JumpToColorsAndFonts<CR>
 
 "Git related
 nnoremap \cb       :action Git.CompareWithBranch<CR>

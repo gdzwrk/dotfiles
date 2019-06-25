@@ -55,6 +55,7 @@ set wildmode=list:longest,full      "Set completion mode
 set foldmethod=marker               "Use markers to define folds (three curly braces)
 set relativenumber                  "Use relative line numbering
 set number                          "Show line number
+set nomodeline                      "Security vulnerability. Fixed in version 8.1.1365
 
 " Change cursor when in insert mode
 "let &t_SI.="\<Esc>[6 q"
@@ -435,8 +436,8 @@ endfun
 
 command! Uwk    :call UnwrapKibana()
 fun! UnwrapKibana()
-    g!/"message": "/d
-    %s/\s\+"message": "\(.*\)"/\1/
+    g!/"rawline": "/d
+    %s/\s\+"rawline": "\(.*\)"/\1/
     %s/,$//
     g/^/m0
     sort u
@@ -558,6 +559,23 @@ function! CopySearchToNewBuffer()
     normal "nPggdd
     nohl
 endfun
+
+nnoremap <leader>r :call Repl()<cr>
+function! Repl()
+  while 1
+    let expr = input('> ', '', 'expression')
+    if expr == 'q' | break | endif
+    if expr != ''
+      echo "\n"
+      if expr =~ '='
+        execute 'let ' . expr
+      else
+        let ans = eval(expr)
+        echo string(ans)
+      endif
+    endif
+  endwhile
+endfunction
 
 "vnoremap \cb :y<CR> | execute "enew"
 "vnoremap \cb :y | normal enew | P
@@ -699,6 +717,7 @@ let g:airline#extensions#tabline#buffer_idx_mode = 1
 let g:airline#extensions#tabline#show_buffers = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
 let g:airline#extensions#tabline#fnamemod = ':~:.'
+"let g:airline#extensions#tabline#fnamemod = ':p:~'
 let g:airline#extensions#tabline#fnamecollapse = 1
 
 " Remove the 'bold' escape code for certain status line elements to fix rendering of vim-airline in tmux
