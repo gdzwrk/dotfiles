@@ -28,6 +28,10 @@ nnoremap gch             :action CallHierarchy<CR>
 nnoremap g$              :action GoToLastTab<CR>
 nnoremap g0              :action GoToTab1<CR>
 
+nnoremap zi              :action Images.Editor.ZoomIn<CR>
+nnoremap zo              :action Images.Editor.ZoomOut<CR>
+nnoremap zr              :action Images.Editor.FitZoomToWindow<CR>
+
 "Next method/Previous method
 nnoremap [[ :action MethodUp<CR>
 nnoremap ]] :action MethodDown<CR>

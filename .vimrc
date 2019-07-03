@@ -436,11 +436,13 @@ endfun
 
 command! Uwk    :call UnwrapKibana()
 fun! UnwrapKibana()
-    g!/"rawline": "/d
-    %s/\s\+"rawline": "\(.*\)"/\1/
+    "g!/"rawline": "/d
+    "%s/\s\+"rawline": "\(.*\)"/\1/
+    g!/"message": "/d
+    %s/\s\+"message": "\(.*\)"/\1/
     %s/,$//
     g/^/m0
-    sort u
+    "sort u
 endfun
 
 command! Jira   :call FormatJiraThread()
