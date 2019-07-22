@@ -784,6 +784,7 @@ Explorer_GetSelection(hwnd="") {
             for window in ComObjCreate("Shell.Application").Windows
                     if (window.hwnd==hwnd)
     sel := window.Document.SelectedItems
+    echom sel
     for item in sel
         ToReturn .= item.path "`n"
     return Trim(ToReturn,"`n")
