@@ -69,6 +69,7 @@ nnoremap <Leader>V       :action EvaluateExpression<CR>
 nnoremap <Leader>b       :action ToggleLineBreakpoint<CR>
 nnoremap <Leader>B       :action ToggleBreakpointEnabled<CR>
 nnoremap <Leader><a-b>   :action EditBreakpoint<CR>
+nnoremap <Leader><c-b>   :action XDebugger.MuteBreakpoints<CR>
 
 nnoremap <Leader>m       :action CloseEditor<CR>
 nnoremap <Leader>M       :action ReopenClosedTab<CR>
