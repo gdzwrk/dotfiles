@@ -26,12 +26,38 @@ mkcd () {
   cd "$1"
 }
 
+#Copy to my user directory with a given issue number
+export MY_EMPLOYEE_TEMP='/u/Development/EmployeeTemp/Garrett.DeZeeuw'
+export MY_EMPLOYEE_TEMP_WIN='U:/Development/EmployeeTemp/Garrett.DeZeeuw'
+
+cpu () {
+    echo "Begin: $(date)"
+    if [ ! -d "$MY_EMPLOYEE_TEMP/$2" ]; then
+        echo "Creating directory $MY_EMPLOYEE_TEMP_WIN/$2"
+        mkdir "$MY_EMPLOYEE_TEMP/$2"
+    fi
+        
+    echo "Copying $1 to $MY_EMPLOYEE_TEMP_WIN/$2/$1..."
+    cp $1 "$MY_EMPLOYEE_TEMP/$2/$1"
+    echo "Copied  $1 to $MY_EMPLOYEE_TEMP_WIN/$2"
+    echo "End:   $(date)"
+}
+
+cdu () {
+    cd "$MY_EMPLOYEE_TEMP/$1"
+}
+
+mkcd () {
+  mkdir "$1"
+  cd "$1"
+}
+
 start () {
     powershell.exe -c "start $1"
 }
 
 # Exclude the 'mine/' directory from my ripgrepping
-alias 'rg'='rg -g "!mine/*"'
+alias 'rg'='rg --sortr path -g "!mine/*"'
 
 alias 'cdcl'='cdw "$(powershell.exe get-clipboard)"'
 alias 'cd..'='cd ..'

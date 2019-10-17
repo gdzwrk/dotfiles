@@ -17,24 +17,32 @@ let mapleader = " "
 " {{{1 ===== Normal mode commands (no leader key) =====
 
 " 'Go-to' mappings
-nnoremap gi              :action GotoImplementation<CR>
-nnoremap gD              :action GotoSuperMethod<CR>
-nnoremap gs              :action GotoSuperMethod<CR>
-nnoremap gt              :action GotoTypeDeclaration<CR>
-nnoremap gth             :action TypeHierarchy<CR>
-nnoremap gu              :action ShowUsages<CR>
-nnoremap gch             :action CallHierarchy<CR>
+nnoremap gi  :action GotoImplementation<CR>
+nnoremap gD  :action GotoSuperMethod<CR>
+nnoremap gs  :action GotoSuperMethod<CR>
+nnoremap gt  :action GotoTypeDeclaration<CR>
+nnoremap gth :action TypeHierarchy<CR>
+nnoremap gu  :action ShowUsages<CR>
+nnoremap gch :action CallHierarchy<CR>
 
-nnoremap g$              :action GoToLastTab<CR>
-nnoremap g0              :action GoToTab1<CR>
+nnoremap g$  :action GoToLastTab<CR>
+nnoremap g0  :action GoToTab1<CR>
 
-nnoremap zi              :action Images.Editor.ZoomIn<CR>
-nnoremap zo              :action Images.Editor.ZoomOut<CR>
-nnoremap zr              :action Images.Editor.FitZoomToWindow<CR>
 
-"Next method/Previous method
-nnoremap [[ :action MethodUp<CR>
-nnoremap ]] :action MethodDown<CR>
+" Font size/zooming
+"nnoremap zi  :action EditorIncreaseFontSize<CR>
+nnoremap <a-i>  :action EditorIncreaseFontSize<CR>
+"nnoremap zo  :action EditorDecreaseFontSize<CR>
+nnoremap <a-o>  :action EditorDecreaseFontSize<CR>
+nnoremap <a-r>  :action EditorResetFontSize<CR>
+
+" Code folding
+nnoremap zC  :action CollapseRegionRecursively<CR>
+nnoremap zO  :action ExpandRegionRecursively<CR>
+
+" Next method/Previous method
+nnoremap [[  :action MethodUp<CR>
+nnoremap ]]  :action MethodDown<CR>
 
 " }}}1 =====      Leader key mappings for IDE     ===== {{{1
 nnoremap <leader><space> :action HideAllWindows<CR>
@@ -50,7 +58,8 @@ nnoremap <Leader>y       :action QuickJavaDoc<CR>
 "nnoremap <Leader>u       :action ShowUsages<CR>
 nnoremap <Leader>i       :action QuickImplementations<CR>
 nnoremap <Leader>o       :action FileStructurePopup<CR>
-nnoremap <Leader>p       :action ToggleInlineHintsAction<CR>
+nnoremap <Leader>p       :action ParameterInfo<CR>
+nnoremap <Leader>P       :action ToggleInlineHintsAction<CR>
 
 nnoremap <Leader>a       :action GotoAction<CR>
 vnoremap <Leader>a       :action GotoAction<CR>
@@ -121,14 +130,14 @@ nnoremap \col      :action JumpToColorsAndFonts<CR>
 nnoremap \cb       :action Git.CompareWithBranch<CR>
 
 "Need these since C-A and C-X are Windows'd.
-nnoremap \i        <c-a>
-nnoremap \d        <c-x>
+nnoremap \=        <c-a>
+nnoremap \-        <c-x>
 
 "Tool window mappings (don't work yet)
 "nnoremap \v              :action ActivateVersionControlToolWindow<CR>
 "nnoremap \g              :action ActivateGradleToolWindow<CR>
 "nnoremap \t              :action ActivateTerminalToolWindow<CR>
-nnoremap \d              :action ActivateDebugToolWindow<CR>
+"nnoremap \d              :action ActivateDebugToolWindow<CR>
 "nnoremap \r              :action ActivateRunToolWindow<CR>
 
 "}}}1 =====      Other VIM-related mappings      ===== {{{1

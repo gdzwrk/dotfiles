@@ -274,9 +274,10 @@ return
     pressed_twice_flag := 0
 return
 
-~CapsLock & x::    ; Maximize window
+~CapsLock & PgUp::  ; Maximize window 
+~CapsLock & x::    
 ~] & x::
-~LShift & Backspace::
+~] & PgUp::
     SetCapsLockState, Off
 
     ; If in an intelliJ dialog, do not do anything (it crashes)
@@ -294,9 +295,8 @@ return
     pressed_twice_flag := 0
 return
 
-~Shift & Del::     ; Minimize window
-~CapsLock & m::
-~] & m::
+~CapsLock & PgDn::  ; Minimize window 
+~] & PgDn::  ; Minimize window 
     SetCapsLockState, Off
     If WinActive("ahk_exe notepad++.exe") {
         Send, !{Space}n

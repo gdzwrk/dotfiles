@@ -184,8 +184,8 @@ inoremap <silent> <C-F9> <Esc>:set cursorline!<CR>:set cursorcolumn!<CR>i
 vnoremap <silent> <C-F9> <Esc>:set cursorline!<CR>:set cursorcolumn!<CR>gv
 
 "Wrap in {noformat} tags
-vnoremap <silent> <leader>wnf <Esc>`<O<Home>{noformat}<Esc>`>o<Home>{noformat}<Esc>gv
-nnoremap <silent> <leader>wnf m`O<Home>{noformat}<Esc>jo<Home>{noformat}<Esc>``
+vnoremap <silent> \wnf <Esc>`<O<Home>{noformat}<Esc>`>o<Home>{noformat}<Esc>gv
+nnoremap <silent> \wnf m`O<Home>{noformat}<Esc>jo<Home>{noformat}<Esc>``
 
 "}}}1
 
@@ -196,21 +196,23 @@ nnoremap <silent> <Leader>f :Files<CR>
 
 " Better command history with q:
 command! CmdHist call fzf#vim#command_history({'right': '40'})
-nnoremap <silent> q; :CmdHist<CR>
+"nnoremap <silent> q; :CmdHist<CR>
+nnoremap <silent> <leader>; :CmdHist<CR>
 
 " Better search history
 command! QHist call fzf#vim#search_history({'right': '40'})
-nnoremap <silent> q/ :QHist<CR>
+"nnoremap <silent> q/ :QHist<CR>
+nnoremap <silent> <leader>/ :QHist<CR>
 
 "}}}1
 
 "##### Window, buffer & tab management ##### {{{1
 
 "Switch among multiple open buffers & windows
-"nnoremap <Leader>h <C-w>h
+nnoremap <Leader>h :bp<CR>
 "nnoremap <Leader>j <C-w>j
 "nnoremap <Leader>k <C-w>k
-"nnoremap <Leader>l <C-w>l
+nnoremap <Leader>l :bn<CR>
 "nnoremap <C-h> <C-w>h
 "nnoremap <C-j> <C-w>j
 "nnoremap <C-k> <C-w>k
@@ -220,6 +222,7 @@ nmap     <Leader>. <Plug>AirlineSelectNextTab
 nnoremap <silent> <Leader>t :tabnew<CR>
 nnoremap <silent> <Leader>n :enew<CR>
 nnoremap <silent> <Leader>m :call HideOrCloseBuffer()<CR>
+nnoremap <silent> <Leader>M :bd!<CR>
 nnoremap <silent> <Leader>b :call HideOrCloseBuffer()<CR>
 nnoremap <silent> <Leader>b :Bd<CR>
 
@@ -737,3 +740,24 @@ let g:netrw_browse_split = 4
 let g:netrw_altv = 1
 let g:netrw_winsize = 25
 "}}}1
+
+" ##### highlights key mapping ##### {{{1
+" highlights.vim mappings:
+
+    "for i in range(1, 9)
+    "  execute 'vnoremap <silent> \'.i.' :<C-U>call <SID>DoHighlight('.i.', 1, v:count)<CR>'
+    "  execute 'nnoremap <silent> \'.i.' :<C-U>call <SID>DoHighlight('.i.', 2, v:count)<CR>'
+    "endfor
+
+    "vnoremap <silent> \0 :<C-U>call <SID>UndoHighlight(1)<CR>
+    "nnoremap <silent> \0 :<C-U>call <SID>UndoHighlight(2)<CR>
+    "nnoremap <silent> \- :call <SID>WindowMatches(0)<CR>
+    "nnoremap <silent> \+ :call <SID>WindowMatches(1)<CR>
+    "nnoremap <silent> \* :call <SID>WindowMatches(2)<CR>
+    "nnoremap <silent> <c-n> :call <SID>Search(0)<CR>
+    "nnoremap <silent> <c-p> :call <SID>Search(1)<CR>
+    "nnoremap <silent> \n :let @/=<SID>Search(0)<CR>
+    "nnoremap <silent> \N :let @/=<SID>Search(1)<CR>
+
+    "nnoremap <silent> \\ :call <SID>MatchToggle()<CR>
+    "vnoremap <silent> \\ <Esc>:call <SID>MatchToggle()<CR>gv
