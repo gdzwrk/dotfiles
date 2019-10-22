@@ -105,10 +105,10 @@ nnoremap gj j
 nnoremap gk k
 
 "These four fixes the capital letter problem when running vim inside terminator inside WSL bash - is this still a thing?
-inoremap <silent> <ESC>OA <Nop>
-inoremap <silent> <ESC>OB <Nop>
-inoremap <silent> <ESC>OC <Nop>
-inoremap <silent> <ESC>OD <Nop>
+"inoremap <silent> <ESC>OA <Nop>
+"inoremap <silent> <ESC>OB <Nop>
+"inoremap <silent> <ESC>OC <Nop>
+"inoremap <silent> <ESC>OD <Nop>
 
 "Swap redo and 'reset line'
 nnoremap U <C-r>

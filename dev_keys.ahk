@@ -62,6 +62,10 @@ CapsLock::
         pressed_twice_flag := 1
         caps_other_key_pressed := 0
         KeyWait, CapsLock
+        if (caps_other_key_pressed = 0) {
+            Send {Esc}
+        }
+
         SetTimer, ResetPressedTwice, -500
     }
 
@@ -482,19 +486,20 @@ return
 #IfWinActive
 
 ;;;;; Launch gVim on selected files in explorer
-#IfWinActive, ahk_exe Explorer.EXE
-~CapsLock & Enter::
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0 
-    OpenVim()
-return
-#Enter:: OpenVim("Admin")
-#IfWinActive
+;#IfWinActive, ahk_exe Explorer.EXE
+;~CapsLock & Enter::
+;    caps_other_key_pressed := 1
+;    pressed_twice_flag := 0 
+;    ;OpenVim()
+;    MsgBox,,,Hello Inside#Block,3
+;return
+;#Enter:: OpenVim("Admin")
+;#IfWinActive
 ;;;;; }}}2
 
 ;;;;; {{{2 Application-specific launcing/activation
 
-;;;;; Cycle current window type
+;;;;; MS Teams
 ~CapsLock & t::
 ~] & t::
     caps_other_key_pressed := 1
@@ -559,17 +564,23 @@ ActivateVim() {
     }
 }
 
-;;;;; Copy text into a new vim buffer
+;;;;; Copy text into a new buffer, or open a file from explorer.exe
 ~CapsLock & Enter::
 ~] & Enter::
     caps_other_key_pressed := 1
     pressed_twice_flag := 0
-    class := "Vim"
-    Send ^c
-    ActivateVim()
-    Send {Esc}{Esc}`;enew{Enter}
-    Sleep 100
-    Send {Esc}{Esc}PG{Esc}k
+    
+    if(WinActive("ahk_exe explorer.exe")) {
+        OpenVim()
+        ;MsgBox,,,Hello,3
+    } else {
+        class := "Vim"
+        Send ^c
+        ActivateVim()
+        Send {Esc}{Esc}`;enew{Enter}
+        Sleep 100
+        Send {Esc}{Esc}PG{Esc}k
+    }
 return
 
 ;;;;; Copy text into existing vim buffer
@@ -649,16 +660,17 @@ return
     }
 return
 
-;;;;; SSMS
+;;;;; SSMS & Vis Studio
 ~CapsLock & c::
 ~] & c::
     caps_other_key_pressed := 1
     pressed_twice_flag := 0
-    GroupAdd, gdzVisStudio, ahk_exe devenv.exe
-    if WinActive("ahk_group gdzVisStudio") {
-        GroupActivate, gdzVisStudio, r
+    GroupAdd, gdzSQL, ahk_exe devenv.exe
+    GroupAdd, gdzSQL, ahk_exe Ssms.exe
+    if WinActive("ahk_group gdzSQL") {
+        GroupActivate, gdzSQL, r
     } else {
-        WinActivate ahk_exe devenv.exe
+        WinActivate ahk_group gdzSQL
     }
 return
 
@@ -814,6 +826,8 @@ OpenVim(Admin="") {
     ; to elevate the next gVim session. It doesn't elevate the current existing
     ; "GVIM" session, but opens a new one named "ADMIN MODE".
     path_name := % Explorer_GetSelection()
+    ;MsgBox ,,,path name: %path_name%, 3
+    
     if (Admin) {
         Run *RunAs C:\Program Files\Vim\vim81\gvim.exe --servername "ADMIN MODE" --remote-silent "%path_name%",,,OutputVarPID
     }
