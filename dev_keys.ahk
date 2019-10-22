@@ -526,6 +526,7 @@ return
     GroupAdd, gdzMintty, ahk_class ConsoleWindowClass
     GroupAdd, gdzMintty, ahk_class VirtualConsoleClass
     GroupAdd, gdzMintty, ahk_exe vcxsrv.exe
+    GroupAdd, gdzMintty, ahk_exe WindowsTerminal.exe
     if WinActive("ahk_group gdzMintty") {
         GroupActivate, gdzMintty, r
     } else {
