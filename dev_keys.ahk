@@ -485,6 +485,7 @@ return
 #IfWinActive, ahk_exe Explorer.EXE
 ~CapsLock & Enter::
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0 
     OpenVim()
 return
 #Enter:: OpenVim("Admin")
@@ -499,23 +500,26 @@ return
     caps_other_key_pressed := 1
     pressed_twice_flag := 0
 
-    ; Get executable of current window
-    WinGet, curExe, ProcessName, A
-
-    if (lastExe != curExe) {
-        ; Create new auto-incrementing group name to separate groups each time this is invoked.
-        gdzCurrent = gdzCurrent%groupNum%
-        groupNum := groupNum + 1
+    if WinExist("Microsoft Teams") {
+        WinActivate
     }
+;    ; Get executable of current window
+;    WinGet, curExe, ProcessName, A
 
-    ; Add all matching windows to this group
-    GroupAdd, %gdzCurrent%, ahk_exe %curExe%
+;    if (lastExe != curExe) {
+;        ; Create new auto-incrementing group name to separate groups each time this is invoked.
+;        gdzCurrent = gdzCurrent%groupNum%
+;        groupNum := groupNum + 1
+;    }
 
-    ; Cycle through the windows
-    GroupActivate, %gdzCurrent%, r
+;    ; Add all matching windows to this group
+;    GroupAdd, %gdzCurrent%, ahk_exe %curExe%
 
-    ;Store exe for comparison next time
-    lastExe := curExe
+;    ; Cycle through the windows
+;    GroupActivate, %gdzCurrent%, r
+
+;    ;Store exe for comparison next time
+;    lastExe := curExe
 return
 
 ;;;;; Terminals
@@ -523,6 +527,7 @@ return
 ~] & g::
     caps_other_key_pressed := 1
     pressed_twice_flag := 0
+
     GroupAdd, gdzMintty, ahk_class mintty
     GroupAdd, gdzMintty, ahk_class ConsoleWindowClass
     GroupAdd, gdzMintty, ahk_class VirtualConsoleClass
@@ -558,29 +563,32 @@ ActivateVim() {
 ~CapsLock & Enter::
 ~] & Enter::
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
     class := "Vim"
     Send ^c
     ActivateVim()
     Send {Esc}{Esc}`;enew{Enter}
     Sleep 100
-    Send {Esc}{Esc}PGo{Esc}
+    Send {Esc}{Esc}PG{Esc}dd
 return
 
 ;;;;; Copy text into existing vim buffer
 ~CapsLock & \::
 ~] & \::
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
     class := "Vim"
     Send ^c
     ActivateVim()
     Sleep 100
-    Send {Esc}{Esc}Gp{Esc}
+    Send Go{Esc}{Esc}p{Esc}G
 return
 
 ;;;;; Explorer.exe
 ~CapsLock & e::
 ~] & e::
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
     class:="CabinetWClass"
     GroupAdd, gdzExplorer, ahk_class %class%
     if WinActive("ahk_group gdzExplorer") {
@@ -594,6 +602,7 @@ return
 ~CapsLock & r::
 ~] & r::
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
     GroupAdd, gdzBrowsers, ahk_class MozillaWindowClass
     GroupAdd, gdzBrowsers, ahk_exe chrome.exe
     if WinActive("ahk_group gdzBrowsers") {
@@ -607,6 +616,7 @@ return
 ~CapsLock & a::
 ~] & a::
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
     progExe:="OUTLOOK.EXE"
     GroupAdd, gdzOutlook, ahk_exe %progExe%
     if WinActive("ahk_group gdzOutlook") {
@@ -620,6 +630,7 @@ return
 ~CapsLock & s::
 ~] & s::
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
     if WinExist("Slack.*Calabrio") {
         WinActivate
     }
@@ -629,6 +640,7 @@ return
 ~CapsLock & d::
 ~] & d::
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
     GroupAdd, gdzIntellij, ahk_exe idea64.exe
     if WinActive("ahk_group gdzIntellij") {
         GroupActivate, gdzIntellij, r
@@ -641,6 +653,7 @@ return
 ~CapsLock & c::
 ~] & c::
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
     GroupAdd, gdzVisStudio, ahk_exe devenv.exe
     if WinActive("ahk_group gdzVisStudio") {
         GroupActivate, gdzVisStudio, r
@@ -653,6 +666,7 @@ return
 ~CapsLock & n::
 ~] & n::
     caps_other_key_pressed := 1
+    pressed_twice_flag := 0
     GroupAdd, gdzNpp, ahk_class Notepad++
     if WinActive("ahk_class Notepad++") {
         GroupActivate, gdzNpp, r
@@ -803,4 +817,5 @@ OpenVim(Admin="") {
     return
 }
 ;;;;; }}}1
+
 
