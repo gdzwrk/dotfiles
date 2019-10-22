@@ -64,7 +64,7 @@ nnoremap <Leader>P       :action ToggleInlineHintsAction<CR>
 nnoremap <Leader>a       :action GotoAction<CR>
 vnoremap <Leader>a       :action GotoAction<CR>
 nnoremap <Leader>s       :action ActivateStructureToolWindow<CR>
-nnoremap <Leader>d       :action QuickImplementations<CR>
+"nnoremap <Leader>d       :action QuickImplementations<CR>
 nnoremap <Leader>f       :action FindInPath<CR>
 nnoremap <Leader>g       :action Generate<CR>
 vnoremap <Leader>g       :action Generate<CR>

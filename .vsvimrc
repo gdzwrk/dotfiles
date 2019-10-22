@@ -1,0 +1,13 @@
+inoremap jk      <Esc>`^
+inoremap <Esc>   <Esc>`^
+inoremap <A-h>   <Left>
+inoremap <A-j>   <Down>
+inoremap <A-k>   <Up>
+inoremap <A-l>   <Right>
+vnoremap m       <Esc>
+
+"Make semi-colon useful
+nnoremap ; :
+nnoremap : ;
+vnoremap ; :
+vnoremap : ;

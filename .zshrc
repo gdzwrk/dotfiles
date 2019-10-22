@@ -78,7 +78,11 @@ plugins=(
     git
     fzf
     vi-mode
+    tmux
 )
+
+ZSH_TMUX_AUTOSTART="true"
+ZSH_TMUX_AUTOCONNECT="true"
 
 source $ZSH/oh-my-zsh.sh
 

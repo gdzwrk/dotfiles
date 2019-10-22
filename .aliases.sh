@@ -37,7 +37,7 @@ cpu () {
         mkdir "$MY_EMPLOYEE_TEMP/$2"
     fi
         
-    echo "Copying $1 to $MY_EMPLOYEE_TEMP_WIN/$2/$1..."
+    echo "Copying $1 to $MY_EMPLOYEE_TEMP_WIN/$2"
     cp $1 "$MY_EMPLOYEE_TEMP/$2/$1"
     echo "Copied  $1 to $MY_EMPLOYEE_TEMP_WIN/$2"
     echo "End:   $(date)"

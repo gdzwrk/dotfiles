@@ -2,7 +2,8 @@
 #InstallKeybdHook
 #SingleInstance FORCE
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
-SetTitleMatchMode, 2
+SetTitleMatchMode, RegEx
+;SetTitleMatchMode, 2
 
 global groupNum := 1
 
@@ -619,11 +620,8 @@ return
 ~CapsLock & s::
 ~] & s::
     caps_other_key_pressed := 1
-    GroupAdd, gdzSlack, ahk_exe slack.exe
-    if WinActive("ahk_group gdzOutlook") {
-        GroupActivate, gdzSlack, r
-    } else {
-        WinActivate ahk_exe slack.exe
+    if WinExist("Slack.*Calabrio") {
+        WinActivate
     }
 return
 
@@ -631,7 +629,6 @@ return
 ~CapsLock & d::
 ~] & d::
     caps_other_key_pressed := 1
-    class:="SunAwtFrame"
     GroupAdd, gdzIntellij, ahk_exe idea64.exe
     if WinActive("ahk_group gdzIntellij") {
         GroupActivate, gdzIntellij, r
@@ -644,11 +641,11 @@ return
 ~CapsLock & c::
 ~] & c::
     caps_other_key_pressed := 1
-    GroupAdd, gdzSsms, ahk_exe Ssms.exe
-    if WinActive("ahk_exe Ssms.exe") {
-        GroupActivate, gdzSsms, r
+    GroupAdd, gdzVisStudio, ahk_exe devenv.exe
+    if WinActive("ahk_group gdzVisStudio") {
+        GroupActivate, gdzVisStudio, r
     } else {
-        WinActivate ahk_exe Ssms.exe
+        WinActivate ahk_exe devenv.exe
     }
 return
 
