@@ -569,7 +569,7 @@ ActivateVim() {
     ActivateVim()
     Send {Esc}{Esc}`;enew{Enter}
     Sleep 100
-    Send {Esc}{Esc}PG{Esc}dd
+    Send {Esc}{Esc}PG{Esc}k
 return
 
 ;;;;; Copy text into existing vim buffer
@@ -581,7 +581,7 @@ return
     Send ^c
     ActivateVim()
     Sleep 100
-    Send Go{Esc}{Esc}p{Esc}G
+    Send Go{Esc}{Esc}PG{Esc}k
 return
 
 ;;;;; Explorer.exe
@@ -684,14 +684,20 @@ return
 SC056::Send {Esc}
 
 `::
+~::
 return
 
 ` Up::
+~ Up::
     if (copy_paste_key_pressed) {
         copy_paste_key_pressed := 0
         return
     } else {
-        Send ``
+        if (GetKeyState("Shift", "D")) {
+            Send ~
+        } else {
+            Send ``
+        }
     }
 return
 

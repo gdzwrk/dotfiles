@@ -254,8 +254,8 @@ nmap <Leader>6 <Plug>AirlineSelectTab6
 nmap <Leader>7 <Plug>AirlineSelectTab7
 nmap <Leader>8 <Plug>AirlineSelectTab8
 nmap <Leader>9 <Plug>AirlineSelectTab9
-nmap <Leader>- <Plug>AirlineSelectPrevTab
-nmap <Leader>= <Plug>AirlineSelectNextTab
+"nmap <Leader>- <Plug>AirlineSelectPrevTab
+"nmap <Leader>= <Plug>AirlineSelectNextTab
 
 "Yank/paste buffer mappings
 nnoremap <silent> <Leader>wy :let g:yanked_buffer=bufnr('%')<CR>
@@ -659,8 +659,10 @@ if has("gui_running")
     "Change font sizes
     "nnoremap + :silent! let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)+1 > 24 ? 24 : submatch(0)+1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
     "nnoremap _ :silent! let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)-1 < 6 ? 6 : submatch(0)-1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
-    nnoremap <c-=> :silent! let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)+1 > 24 ? 24 : submatch(0)+1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
-    nnoremap <c--> :silent! let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)-1 < 6 ? 6 : submatch(0)-1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
+    "nnoremap <c-=> :silent! let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)+1 > 24 ? 24 : submatch(0)+1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
+    "nnoremap <c--> :silent! let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)-1 < 6 ? 6 : submatch(0)-1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
+    nnoremap <leader>= :let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)+1 > 24 ? 24 : submatch(0)+1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
+    nnoremap <leader>- :let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)-1 < 6 ? 6 : submatch(0)-1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
 else
     "Define anything that should only execute when not using gVim
     set shell=bash
