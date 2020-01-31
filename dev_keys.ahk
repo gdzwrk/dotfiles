@@ -46,28 +46,35 @@ return
 CapsLock::  
     SetCapsLockState, Off
 
-    ;KeyWait, CapsLock, T1
-    if (caps_other_key_pressed = 1) {
-        caps_other_key_pressed := 0
-        pressed_twice_flag := 1
-        ;KeyWait, CapsLock
-        return
+    KeyWait, CapsLock
+    if (caps_other_key_pressed = 0) {
+        Send {Esc}
     }
-
-    if (pressed_twice_flag = 1) {
-        pressed_twice_flag := 0
+    else {
         caps_other_key_pressed := 0
-        Send {Alt down}{Tab}{Alt up}
-    } else {
-        pressed_twice_flag := 1
-        caps_other_key_pressed := 0
-        KeyWait, CapsLock
-        if (caps_other_key_pressed = 0) {
-            Send {Esc}
-        }
-
-        SetTimer, ResetPressedTwice, -500
     }
+;    ;KeyWait, CapsLock, T1
+;    if (caps_other_key_pressed = 1) {
+;        caps_other_key_pressed := 0
+;        pressed_twice_flag := 1
+;        ;KeyWait, CapsLock
+;        return
+;    }
+;
+;    if (pressed_twice_flag = 1) {
+;        pressed_twice_flag := 0
+;        caps_other_key_pressed := 0
+;        Send {Alt down}{Tab}{Alt up}
+;    } else {
+;        pressed_twice_flag := 1
+;        caps_other_key_pressed := 0
+;        KeyWait, CapsLock
+;        if (caps_other_key_pressed = 0) {
+;            Send {Esc}
+;        }
+;
+;        SetTimer, ResetPressedTwice, -500
+;    }
 
     SetCapsLockState, Off
 return
@@ -83,27 +90,27 @@ return
 ; skip_bracket stuff had to be added to prevent '}]' input  
 ; when shift and brace key were release in a specific timing.
 
-]::
-    skip_bracket := 0
-return
+;]::
+;    skip_bracket := 0
+;return
 
-} Up::
-    skip_bracket := 1
-    SendRaw }
-return
+;} Up::
+;    skip_bracket := 1
+;    SendRaw }
+;return
 
-] Up::
-    if (!skip_bracket && caps_other_key_pressed = 0) {
-        if (GetKeyState("Shift", "D")) {
-            SendRaw }
-        }  else {
-            Send ]
-        }
-    }
-    skip_bracket := 0
-    caps_other_key_pressed = 0
-    pressed_twice_flag := 0
-return
+;] Up::
+;    if (!skip_bracket && caps_other_key_pressed = 0) {
+;        if (GetKeyState("Shift", "D")) {
+;            SendRaw }
+;        }  else {
+;            Send ]
+;        }
+;    }
+;    skip_bracket := 0
+;    caps_other_key_pressed = 0
+;    pressed_twice_flag := 0
+;return
 
 ;;;;; Caps + hjkl - VIM-all-the-things!!! {{{2
 ~CapsLock & h::
@@ -259,8 +266,8 @@ return
 
 ;;;;; {{{2 Switcheroo and window management stuff
 
-~CapsLock & f::    ; Switcheroo
-~] & f::
+~CapsLock & q::    ; Switcheroo
+~] & q::
     SetCapsLockState, Off
     Send, {LAlt down}{Ctrl down}{Shift down}
     Send, {F9}
@@ -314,7 +321,8 @@ return
 
 
 LShift & RWin::     ; Minimize to tray (4t minimizer)
-    Send !+^{F8}
+LShift & LWin::     ; Minimize to tray (4t minimizer)
+    Send !+^{Space}
 return
 
 ~CapsLock & 4::     ; Open 4t minimizer
@@ -461,11 +469,17 @@ Return
 
 ;;;;; {{{2 Persistent Alt+Tab and navigation in switcher
 ~CapsLock & Space::  ; Open Alt+Tab persistently
-~CapsLock & Backspace::
 ~] & Space::
+~CapsLock & Backspace::
+~] & Backspace::
     Send {Alt down}{Ctrl down}{Tab}{Alt up}{Ctrl up}
     caps_other_key_pressed := 1
     pressed_twice_flag := 0
+return
+
+~CapsLock & f::
+~] & f::
+    Send {Alt down}{Tab}{Alt up}
 return
 
 ;;;;; Use VIM navigation in Alt+Tab window
@@ -665,13 +679,15 @@ return
 ~] & c::
     caps_other_key_pressed := 1
     pressed_twice_flag := 0
-    GroupAdd, gdzSQL, ahk_exe devenv.exe
+    GroupAdd, gdzSQL, .*- Microsoft Visual Studio
     GroupAdd, gdzSQL, ahk_exe Ssms.exe
     if WinActive("ahk_group gdzSQL") {
         GroupActivate, gdzSQL, r
     } else {
         WinActivate ahk_group gdzSQL
     }
+;    WinGet, c, Count, ahk_group gdzSQL
+;    MsgBox, c(%c%)
 return
 
 ;;;;; Notepad++

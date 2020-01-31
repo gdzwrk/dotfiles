@@ -12,11 +12,9 @@ set undofile
 set viewdir=~/.vim/view
 set path+=**
 
-
 "Display/terminal stuff
 set t_Co=256                     "Set terminal color mode to 256
 set listchars=tab:»·,trail:·,space:·,eol:¬                           "Set tab, space, and trailing characters as whitespace characters
-
 "}}}1
 
 "Mix well, add salt to preference {{{1
@@ -38,7 +36,8 @@ set visualbell                      "Blink instead of ding...
 set showcmd                         "Show partial commands in the last line of the screen
 set nostartofline                   "Don't move cursor to beginning of line for some commands
 set mouse=a                         "Enable the mouse
-set timeout ttimeoutlen=1           "Amount of time to wait for next keystroke in multi-key mappings
+set timeout timeoutlen=500          "Default timeout setting of 500ms
+set ttimeoutlen=1                   "Amount of time to wait for next keystroke in multi-key mappings
 set virtualedit=all                 "Allow cursor to move into empty space
 set laststatus=2                    "Always display status line, even if only one window is displayed
 set backspace=indent,eol,start      "Allow backspacing across lines, indentations
@@ -66,21 +65,16 @@ let &t_EI.="\e[1 q"
 let &t_te.="\e[0 q"
 "}}}1
 
-"##### General key mapping ##### {{{1
+"##### Ground level key mapping. Essentials ##### {{{1
 "Spacebar as Leader key
 let mapleader=" "
 
-"Re-source file
+"Re-source current buffer
 noremap <F7> :w<CR>:source %<CR>
 
-"So many ways to leave insert mode! and other insert mode fun
+"Just kidding, escape
 inoremap jk      <Esc>`^
 inoremap <Esc>   <Esc>`^
-inoremap <A-h>   <Left>
-inoremap <A-j>   <Down>
-inoremap <A-k>   <Up>
-inoremap <A-l>   <Right>
-vnoremap m       <Esc>
 
 "Make semi-colon useful
 nnoremap ; :
@@ -88,7 +82,8 @@ nnoremap : ;
 vnoremap ; :
 vnoremap : ;
 
-"Remap ctrl+move keys to scroll window without moving cursor
+" ##### Movement and hjkl- related ##### {{{2
+"Remap alt+hjkl keys to scroll window without moving cursor
 nnoremap <A-j> <C-e>
 nnoremap <A-k> <C-y>
 nnoremap <A-h> 8zh
@@ -104,11 +99,17 @@ nnoremap k gk
 nnoremap gj j
 nnoremap gk k
 
-"These four fixes the capital letter problem when running vim inside terminator inside WSL bash - is this still a thing?
-"inoremap <silent> <ESC>OA <Nop>
-"inoremap <silent> <ESC>OB <Nop>
-"inoremap <silent> <ESC>OC <Nop>
-"inoremap <silent> <ESC>OD <Nop>
+"Move current line(s) up or down
+"nnoremap J :m .+1<CR>
+"nnoremap K :m .-2<CR>
+vnoremap J :m '>+1<CR>gv
+vnoremap K :m '<-2<CR>gv
+
+"Make insert mode arrow keys great again
+inoremap OD <Left>
+inoremap OC <Right>
+inoremap OA <Up>
+inoremap OB <Down>
 
 "Swap redo and 'reset line'
 nnoremap U <C-r>
@@ -124,9 +125,11 @@ nnoremap \a <C-a>
 nnoremap \x <C-x>
 nnoremap <C-a> ggVG
 nnoremap <silent> <C-v> :set paste<CR>P:set nopaste<CR>
+
 vnoremap <C-x> x
 vnoremap <C-c> ygv
 vnoremap <silent> <C-v> :<C-u>set paste<CR>gv"_x"*P:set nopaste<CR>
+
 inoremap <silent> <C-v> <Esc>:set paste<CR>p:set nopaste<CR>a
 inoremap <silent> <C-b> <C-v>
 inoremap <C-BS> <C-w>
@@ -137,18 +140,19 @@ nnoremap <A-p> $p
 "When in visual mode, delete/paste without yanking the overwritten selection (use 'x' for that)
 vnoremap p "_dP
 vnoremap d "dd
+vnoremap m <Esc>
 
 "Return to original position after yanking
 vnoremap y <Esc>mzgvy`z
 
-"Use Ctrl+Alt+J / Ctrl+Alt+K in normal, insert, visual mode to move lines
-nnoremap <silent> <Leader>j :m .+1<CR>==
-nnoremap <silent> <Leader>k :m .-2<CR>==
-"inoremap <silent> <A-j> <Esc>:m .+1<CR>==gi
-"inoremap <silent> <A-k> <Esc>:m .-2<CR>==gi
-"vnoremap <silent> <A-j> :m '>+1<CR>gv=gv
-"vnoremap <silent> <A-k> :m '<-2<CR>gv=gv
+"Use <leader>j/k to go forward/back in jump list
+nnoremap <silent> <Leader>k <c-o>
+nnoremap <silent> <Leader>j <c-i>
 
+
+"}}}2
+"
+" ##### Whitespace, spelling & formatting ##### {{{2
 "Show/hide/trim trailing whitespace
 inoremap <silent> \ws <Esc>:set list!<CR>li
 
@@ -187,21 +191,16 @@ vnoremap <silent> <C-F9> <Esc>:set cursorline!<CR>:set cursorcolumn!<CR>gv
 vnoremap <silent> \wnf <Esc>`<O<Home>{noformat}<Esc>`>o<Home>{noformat}<Esc>gv
 nnoremap <silent> \wnf m`O<Home>{noformat}<Esc>jo<Home>{noformat}<Esc>``
 
+"}}}2
 "}}}1
 
 "##### FZF bindings be here ##### {{{1
+command! QHist call fzf#vim#search_history({'right': '40'})
+command! CmdHist call fzf#vim#command_history({'right': '40'})
 
 nnoremap <silent> <Leader>0 :Buffers<CR>
 nnoremap <silent> <Leader>f :Files<CR>
-
-" Better command history with q:
-command! CmdHist call fzf#vim#command_history({'right': '40'})
-"nnoremap <silent> q; :CmdHist<CR>
 nnoremap <silent> <leader>; :CmdHist<CR>
-
-" Better search history
-command! QHist call fzf#vim#search_history({'right': '40'})
-"nnoremap <silent> q/ :QHist<CR>
 nnoremap <silent> <leader>/ :QHist<CR>
 
 "}}}1
@@ -209,22 +208,13 @@ nnoremap <silent> <leader>/ :QHist<CR>
 "##### Window, buffer & tab management ##### {{{1
 
 "Switch among multiple open buffers & windows
-nnoremap <Leader>h :bp<CR>
-"nnoremap <Leader>j <C-w>j
-"nnoremap <Leader>k <C-w>k
-nnoremap <Leader>l :bn<CR>
-"nnoremap <C-h> <C-w>h
-"nnoremap <C-j> <C-w>j
-"nnoremap <C-k> <C-w>k
-"nnoremap <C-l> <C-w>l
 nmap     <Leader>, <Plug>AirlineSelectPrevTab
 nmap     <Leader>. <Plug>AirlineSelectNextTab
+
 nnoremap <silent> <Leader>t :tabnew<CR>
 nnoremap <silent> <Leader>n :enew<CR>
 nnoremap <silent> <Leader>m :call HideOrCloseBuffer()<CR>
 nnoremap <silent> <Leader>M :bd!<CR>
-nnoremap <silent> <Leader>b :call HideOrCloseBuffer()<CR>
-nnoremap <silent> <Leader>b :Bd<CR>
 
 "Make arrow keys useful for window, buffer & tab management
 nnoremap <Left>             <C-w>h
@@ -232,12 +222,11 @@ nnoremap <Down>             <C-w>j
 nnoremap <Up>               <C-w>k
 nnoremap <Right>            <C-w>l
 
-nnoremap <silent> <a-Left>  :bp<CR>
-nnoremap <silent> <a-Down>  :hid<CR>
-nnoremap <silent> <a-Up>    :vsp<CR><C-w>l
-nnoremap <silent> <a-Right> :bn<CR>
-nnoremap <silent> <a-Home>  :enew<CR>
-nnoremap <silent> <a-End>   :bp<CR>:bd#<CR>
+"Keep these for when I decide what alt+arrows should do in normal mode
+"nnoremap <silent> <a-Left>
+"nnoremap <silent> <a-Down>
+"nnoremap <silent> <a-Up>
+"nnoremap <silent> <a-Right>
 
 nnoremap <silent> <c-Left>  :tabp<CR>
 nnoremap <silent> <c-Down>  :tabclose<CR>
@@ -254,8 +243,6 @@ nmap <Leader>6 <Plug>AirlineSelectTab6
 nmap <Leader>7 <Plug>AirlineSelectTab7
 nmap <Leader>8 <Plug>AirlineSelectTab8
 nmap <Leader>9 <Plug>AirlineSelectTab9
-"nmap <Leader>- <Plug>AirlineSelectPrevTab
-"nmap <Leader>= <Plug>AirlineSelectNextTab
 
 "Yank/paste buffer mappings
 nnoremap <silent> <Leader>wy :let g:yanked_buffer=bufnr('%')<CR>
@@ -588,14 +575,6 @@ endfunction
 
 "##### Autocommands ##### {{{1
 
-"Persist marks between vim sessions
-"augroup persistmarks
-"    au!
-"    autocmd BufWinLeave  *.* mkview!
-"    autocmd BufWinEnter  *.* silent loadview
-"    autocmd BufWritePost *   mkview!
-"augroup END
-
 " optional reset cursor on start:
 augroup myCmds
     au!
@@ -659,8 +638,8 @@ if has("gui_running")
     "Change font sizes
     "nnoremap + :silent! let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)+1 > 24 ? 24 : submatch(0)+1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
     "nnoremap _ :silent! let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)-1 < 6 ? 6 : submatch(0)-1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
-    "nnoremap <c-=> :silent! let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)+1 > 24 ? 24 : submatch(0)+1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
-    "nnoremap <c--> :silent! let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)-1 < 6 ? 6 : submatch(0)-1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
+    nnoremap <c-=> :silent! let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)+1 > 24 ? 24 : submatch(0)+1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
+    nnoremap <c--> :silent! let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)-1 < 6 ? 6 : submatch(0)-1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
     nnoremap <leader>= :let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)+1 > 24 ? 24 : submatch(0)+1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
     nnoremap <leader>- :let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)-1 < 6 ? 6 : submatch(0)-1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
 else
@@ -668,6 +647,11 @@ else
     set shell=bash
     set shellpipe=|
     set shellredir=>
+    set term=tmux-256color
+
+    "Change font sizes
+    nnoremap <c-=> :silent! let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)+1 > 24 ? 24 : submatch(0)+1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
+    nnoremap <c--> :silent! let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)-1 < 6 ? 6 : submatch(0)-1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
 
     "Format JSON via python
     nnoremap =j :%!python -m json.tool<CR>

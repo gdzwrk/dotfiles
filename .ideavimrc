@@ -17,10 +17,12 @@ let mapleader = " "
 " {{{1 ===== Normal mode commands (no leader key) =====
 
 " 'Go-to' mappings
+nnoremap gg gg
 nnoremap gi  :action GotoImplementation<CR>
 nnoremap gD  :action GotoSuperMethod<CR>
 nnoremap gs  :action GotoSuperMethod<CR>
-nnoremap gt  :action GotoTypeDeclaration<CR>
+nnoremap gtd  :action GotoTypeDeclaration<CR>
+nnoremap gd  :action GotoDeclaration<CR>
 nnoremap gth :action TypeHierarchy<CR>
 nnoremap gu  :action ShowUsages<CR>
 nnoremap gch :action CallHierarchy<CR>
