@@ -193,3 +193,5 @@ compinit
 setopt AUTO_LIST
 setopt MENU_COMPLETE
 unsetopt BASH_AUTO_LIST
+ 
+cd ~

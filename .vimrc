@@ -106,10 +106,10 @@ vnoremap J :m '>+1<CR>gv
 vnoremap K :m '<-2<CR>gv
 
 "Make insert mode arrow keys great again
-inoremap OD <Left>
-inoremap OC <Right>
 inoremap OA <Up>
 inoremap OB <Down>
+inoremap OD <Left>
+inoremap OC <Right>
 
 "Swap redo and 'reset line'
 nnoremap U <C-r>
