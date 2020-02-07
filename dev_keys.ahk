@@ -58,8 +58,10 @@ return
 #IfWinActive ahk_exe EliteDangerous64.exe
 
 CapsLock::
-    Send {CapsLock}
+    Send {ScrollLock}
+    SetCapsLockState, Off
 return
+
 CapsLock & q::q
 CapsLock & e::e
 CapsLock & r::r
