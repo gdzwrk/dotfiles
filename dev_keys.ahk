@@ -74,6 +74,16 @@ ResetPressedTwice:
     skip_bracket := 0
 return
 
+;Application-specific remapping
+#IfWinActive ahk_exe EliteDangerous64.exe
+CapsLock::CapsLock
+CapsLock & w::Up
+CapsLock & s::Down
+CapsLock & a::Left
+CapsLock & d::Right
+return
+#IfWinActive
+
 ; Add ']' as a right-hand modifier key. Disable it on first press-
 ; send when released if no other key combo was used.
 ; skip_bracket stuff had to be added to prevent '}]' input  

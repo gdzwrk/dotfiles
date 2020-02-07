@@ -1,7 +1,7 @@
 #Open files in same gVim instance by default
 
 gvim () {
-    command '/c/Program Files/vim/vim81/gvim.exe' --remote-silent "$@" &
+    command '/c/Program Files (x86)/vim/vim82/gvim.exe' --remote-silent "$@" &
 }
 gvimt () { command gvim --remote-tab-silent "$@" & }
 gvimr () { command gvim --R --remote-tab-silent "$@" & }
