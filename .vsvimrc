@@ -1,3 +1,11 @@
+set clipboard=unnamed
+let mapleader=" "
+set hlsearch                        "Highlight current search matches
+set incsearch                       "Incremental search as it's typed
+set autoindent                      "Maintain indentation when opening a new line
+set ignorecase                      "Set case-insensitive search as the default
+set smartcase                       "Only do case-sensitive search when a capital letter is typed
+
 inoremap jk      <Esc>`^
 inoremap <Esc>   <Esc>`^
 inoremap <A-h>   <Left>
@@ -11,3 +19,18 @@ nnoremap ; :
 nnoremap : ;
 vnoremap ; :
 vnoremap : ;
+
+nnoremap vv <C-v>
+
+nnoremap <leader>, gT
+nnoremap <leader>. gt
+nnoremap <Leader>k <c-o>
+nnoremap <Leader>j <c-i>
+
+nnoremap <Leader>m :q<cr>
+nnoremap <Leader>m :q!<cr>
+nnoremap <Leader>n :vsc SQLServerObjectExplorerNewQueryOnToolbar<cr>
+
+nnoremap <Leader>c :nohl<cr>
+
+

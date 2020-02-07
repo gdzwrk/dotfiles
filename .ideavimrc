@@ -1,6 +1,6 @@
 ".ideavimrc file by garrett deZeeuw {{{1
 set timeout ttimeoutlen=500
-set clipboard=unnamed            "Use system clipboard when yanking
+set clipboard+=unnamed            "Use system clipboard when yanking
 set virtualedit=all              "Allow cursor to move into empty space
 set sidescrolloff=16
 set sidescroll=8
@@ -17,10 +17,12 @@ let mapleader = " "
 " {{{1 ===== Normal mode commands (no leader key) =====
 
 " 'Go-to' mappings
+nnoremap gg gg
 nnoremap gi  :action GotoImplementation<CR>
 nnoremap gD  :action GotoSuperMethod<CR>
 nnoremap gs  :action GotoSuperMethod<CR>
-nnoremap gt  :action GotoTypeDeclaration<CR>
+nnoremap gtd  :action GotoTypeDeclaration<CR>
+nnoremap gd  :action GotoDeclaration<CR>
 nnoremap gth :action TypeHierarchy<CR>
 nnoremap gu  :action ShowUsages<CR>
 nnoremap gch :action CallHierarchy<CR>

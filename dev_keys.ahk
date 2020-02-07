@@ -3,9 +3,9 @@
 #SingleInstance FORCE
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 SetTitleMatchMode, RegEx
-;SetTitleMatchMode, 2
 
-global groupNum := 1
+;;;;; Auto Exectuion - initialize variables here
+other_key_pressed := 0
 
 ;;;;; {{{1 Hotstrings
 :*o:@@nf::{{}noformat{}}
@@ -27,7 +27,7 @@ global groupNum := 1
 
 ;;;;; }}}1
 
-;;;;; {{{1 Remap CapsLock
+;;;;; {{{1 Remake CapsLock To Be Good
 !CapsLock::            ; Alt+CapsLock
 ^CapsLock::            ; Ctrl+CapsLock
 +CapsLock::            ; Shift+CapsLock
@@ -42,36 +42,16 @@ return
 SetCapsLockState, % (t:=!t) ?  "On" :  "Off"
 return
 
-; If caps is pressed twice within 500ms then Alt-Tab
+; If caps is depressed and released without firing a hotkey, send Esc
 CapsLock::  
     SetCapsLockState, Off
-
-    ;KeyWait, CapsLock, T1
-    if (caps_other_key_pressed = 1) {
-        caps_other_key_pressed := 0
-        pressed_twice_flag := 1
-        ;KeyWait, CapsLock
-        return
-    }
-
-    if (pressed_twice_flag = 1) {
-        pressed_twice_flag := 0
-        caps_other_key_pressed := 0
-        Send {Alt down}{Tab}{Alt up}
+    KeyWait, CapsLock
+    if (other_key_pressed = 0) {
+        Send {Esc}
     } else {
-        pressed_twice_flag := 1
-        caps_other_key_pressed := 0
-        KeyWait, CapsLock
-        SetTimer, ResetPressedTwice, -500
+        other_key_pressed := 0
     }
-
     SetCapsLockState, Off
-return
-
-ResetPressedTwice:
-    caps_other_key_pressed := 0
-    pressed_twice_flag := 0
-    skip_bracket := 0
 return
 
 ;Application-specific remapping
@@ -81,6 +61,7 @@ CapsLock & w::Up
 CapsLock & s::Down
 CapsLock & a::Left
 CapsLock & d::Right
+CapsLock & f::F7
 return
 #IfWinActive
 
@@ -88,27 +69,25 @@ return
 ; send when released if no other key combo was used.
 ; skip_bracket stuff had to be added to prevent '}]' input  
 ; when shift and brace key were release in a specific timing.
-
 ]::
-    skip_bracket := 0
-return
-
-} Up::
-    skip_bracket := 1
-    SendRaw }
-return
-
-] Up::
-    if (!skip_bracket && caps_other_key_pressed = 0) {
-        if (GetKeyState("Shift", "D")) {
+}::
+    shift_state_on_depress := GetKeyState("Shift")
+    ;MsgBox,,, 'shift_state_on_depress is:' %shift_state_on_depress%, 0.5
+    KeyWait, ]
+    if (other_key_pressed = 0){
+        if (shift_state_on_depress) {
             SendRaw }
         }  else {
             Send ]
-        }
+        } 
+    } else {
+        other_key_pressed := 0
     }
-    skip_bracket := 0
-    caps_other_key_pressed = 0
-    pressed_twice_flag := 0
+return
+
+; Supress the normal key release action
+] Up::
+} Up::
 return
 
 ;;;;; Caps + hjkl - VIM-all-the-things!!! {{{2
@@ -124,8 +103,7 @@ return
     } else {
         Send {Left}
     }
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
+    other_key_pressed := 1
 return
 
 ~CapsLock & j::
@@ -140,8 +118,7 @@ return
     } else {
         Send {Down}
     }
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
+    other_key_pressed := 1
 return
 
 ~CapsLock & k::
@@ -156,8 +133,7 @@ return
     } else {
         Send {Up}
     }
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
+    other_key_pressed := 1
 return
 
 ~CapsLock & l::
@@ -172,8 +148,7 @@ return
     } else {
         Send {Right}
     }
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
+    other_key_pressed := 1
 return
 
 ~CapsLock & Up::
@@ -184,8 +159,7 @@ return
     } else {
         Send {PgUp}
     }
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
+    other_key_pressed := 1
 return
 
 ~CapsLock & Down::
@@ -196,8 +170,7 @@ return
     } else {
         Send {PgDn}
     }
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
+    other_key_pressed := 1
 return
 
 ~CapsLock & Left::
@@ -214,8 +187,7 @@ return
     } else {
         Send {Home}
     }
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
+    other_key_pressed := 1
 return
 
 ~CapsLock & Right::
@@ -232,62 +204,51 @@ return
     } else {
         Send {End}
     }
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
+    other_key_pressed := 1
 return
 
 ~CapsLock & [::
 ] & [::
 ^[::
     Send {Esc}
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
+    other_key_pressed := 1
 return
 
 ~CapsLock & '::
     Send {AppsKey}
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
+    other_key_pressed := 1
 return
 
 ~CapsLock & `;::
     Send {Tab}
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
+    other_key_pressed := 1
 return
 
 ~CapsLock & /::
     Send +{Tab}
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
+    other_key_pressed := 1
 return
 ;;;;; }}}2
 
 ;;;;; {{{2 Switcheroo and window management stuff
 
-~CapsLock & f::    ; Switcheroo
-~] & f::
+~CapsLock & q::    ; Switcheroo
+~] & q::
     SetCapsLockState, Off
     Send, {LAlt down}{Ctrl down}{Shift down}
     Send, {F9}
     Send, {Shift up}{Ctrl up}{LAlt up}
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
+    other_key_pressed := 1
 return
 
-~CapsLock & z::    ; Close window
 ~CapsLock & Del::
-~] & z::
 ~] & Del::
     SetCapsLockState, Off
     Send !{F4}
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
+    other_key_pressed := 1
 return
 
 ~CapsLock & PgUp::  ; Maximize window 
-~CapsLock & x::    
-~] & x::
 ~] & PgUp::
     SetCapsLockState, Off
 
@@ -302,8 +263,7 @@ return
         WinRestore A
     Else
         WinMaximize A
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
+    other_key_pressed := 1
 return
 
 ~CapsLock & PgDn::  ; Minimize window 
@@ -314,27 +274,25 @@ return
     } else {
         WinMinimize, A
     }
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
+    other_key_pressed := 1
 return
 
 
 LShift & RWin::     ; Minimize to tray (4t minimizer)
-    Send !+^{F8}
+LShift & LWin::     ; Minimize to tray (4t minimizer)
+    Send !+^{Space}
 return
 
 ~CapsLock & 4::     ; Open 4t minimizer
     Send !+^{F4}
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
+    other_key_pressed := 1
 return
 
 ~CapsLock & ,::    ; Move window to prev display
 ~] & ,::
     SetCapsLockState, Off
     Send #+{Left}
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
+    other_key_pressed := 1
 return
 
 
@@ -342,8 +300,7 @@ return
 ~] & .::
     SetCapsLockState, Off
     Send #+{Right}
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
+    other_key_pressed := 1
 return
 
 ~CapsLock & F9::   ; Move window to main monitor, center, 75%
@@ -351,22 +308,7 @@ return
     WinGet, active_id, ID
     WinGetActiveStats, active_title, active_width, active_height, active_x, active_y
     WinMove, %active_title%, , 240, 135, 1440, 810
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
-return
-
-~CapsLock & F10::
-    SetCapsLockState, Off
-    WinGet, active_id, ID
-    WinGetActiveStats, active_title, active_width, active_height, active_x, active_y
-    WinMove, %active_title%, , 240, 135, 1440, 810
-    WinGet MX, MinMax, A
-    If MX
-        WinRestore A
-    Else
-        WinMaximize A
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
+    other_key_pressed := 1
 return
 
 ; Maximize window across top two monitors
@@ -401,8 +343,7 @@ return
 
         ;WinRestore A
     }
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
+    other_key_pressed := 1
 return
 
 ; Give info about current window size
@@ -411,7 +352,7 @@ return
     WinGet, active_id, ID
     WinGetActiveStats, active_title, active_width, active_height, active_x, active_y
     MsgBox,,, title:%active_title% w:%active_width% h:%active_height% x:%active_x% y:%active_y%, 3
-    caps_other_key_pressed := 1
+    other_key_pressed := 1
     if (active_width >= 3800)
     {
         ;MsgBox,,, Detected embiggenation, 1
@@ -427,51 +368,56 @@ return
   return
 #IfWinActive
 
-; Hide window titlebar
-~CapsLock & PrintScreen::
-    SetCapsLockState, Off
-    WinGetActiveStats, active_title, active_width, active_height, active_x, active_y
-    WinSet, Style, -0xC00000, %active_title%
-;    WinGet, active_id, ID
-;    WinGet, active_style, Style
-;    MsgBox,,, id:%active_id%   style:%active_style%, 1
-;    if (active_style & 0xC00000)
-;        WinSet, Style, -0xC00000,
-;    else
-;        WinSet, Style, +0xC00000
-    caps_other_key_pressed := 1
-return
-
-; Show window titlebar
-~CapsLock & ScrollLock::
-    SetCapsLockState, Off
-    WinGetActiveStats, active_title, active_width, active_height, active_x, active_y
-    WinSet, Style, +0xC00000, %active_title%
-    caps_other_key_pressed := 1
-return
-
-; Show/Hide the taskbar
-~CapsLock & LWin::
-    SetCapsLockState, Off
-    VarSetCapacity(APPBARDATA, A_PtrSize=4 ? 36:48)
-    NumPut(DllCall("Shell32\SHAppBarMessage", "UInt", 4 ; ABM_GETSTATE
-                                           , "Ptr", &APPBARDATA
-                                           , "Int")
-  ? 2:1, APPBARDATA, A_PtrSize=4 ? 32:40) ; 2 - ABS_ALWAYSONTOP, 1 - ABS_AUTOHIDE
-  , DllCall("Shell32\SHAppBarMessage", "UInt", 10 ; ABM_SETSTATE
-                                    , "Ptr", &APPBARDATA)
-    KeyWait, % A_ThisHotkey
-    caps_other_key_pressed := 1
-Return
+;; Hide window titlebar
+;~CapsLock & PrintScreen::
+;    SetCapsLockState, Off
+;    WinGetActiveStats, active_title, active_width, active_height, active_x, active_y
+;    WinSet, Style, -0xC00000, %active_title%
+;;    WinGet, active_id, ID
+;;    WinGet, active_style, Style
+;;    MsgBox,,, id:%active_id%   style:%active_style%, 1
+;;    if (active_style & 0xC00000)
+;;        WinSet, Style, -0xC00000,
+;;    else
+;;        WinSet, Style, +0xC00000
+;    other_key_pressed := 1
+;return
+;
+;;; Show window titlebar
+;~CapsLock & ScrollLock::
+;    SetCapsLockState, Off
+;    WinGetActiveStats, active_title, active_width, active_height, active_x, active_y
+;    WinSet, Style, +0xC00000, %active_title%
+;    other_key_pressed := 1
+;return
+;
+;; Show/Hide the taskbar
+;~CapsLock & LWin::
+;    SetCapsLockState, Off
+;    VarSetCapacity(APPBARDATA, A_PtrSize=4 ? 36:48)
+;    NumPut(DllCall("Shell32\SHAppBarMessage", "UInt", 4 ; ABM_GETSTATE
+;                                           , "Ptr", &APPBARDATA
+;                                           , "Int")
+;  ? 2:1, APPBARDATA, A_PtrSize=4 ? 32:40) ; 2 - ABS_ALWAYSONTOP, 1 - ABS_AUTOHIDE
+;  , DllCall("Shell32\SHAppBarMessage", "UInt", 10 ; ABM_SETSTATE
+;                                    , "Ptr", &APPBARDATA)
+;    KeyWait, % A_ThisHotkey
+;    other_key_pressed := 1
+;Return
 ;;;;; }}}2
 
 ;;;;; {{{2 Persistent Alt+Tab and navigation in switcher
 ~CapsLock & Space::  ; Open Alt+Tab persistently
-~CapsLock & Backspace::
 ~] & Space::
+~CapsLock & Backspace::
+~] & Backspace::
     Send {Alt down}{Ctrl down}{Tab}{Alt up}{Ctrl up}
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
+    other_key_pressed := 1
+return
+
+~CapsLock & f::
+~] & f::
+    Send {Alt down}{Tab}{Alt up}
 return
 
 ;;;;; Use VIM navigation in Alt+Tab window
@@ -485,58 +431,28 @@ return
 *s::Send {Blind}{Left}
 *f::Send {Blind}{Right}
 *q::Send ^w
-*[::Send {Esc}
-*t::Send {Esc}
+*m::Send ^w
 *Delete::Send ^w
 *Backspace::Send {Space}
 #IfWinActive
-
-;;;;; Launch gVim on selected files in explorer
-#IfWinActive, ahk_exe Explorer.EXE
-~CapsLock & Enter::
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0 
-    OpenVim()
-return
-#Enter:: OpenVim("Admin")
-#IfWinActive
-;;;;; }}}2
+;;;; ;}}}2
 
 ;;;;; {{{2 Application-specific launcing/activation
 
-;;;;; Cycle current window type
+;;;;; MS Teams
 ~CapsLock & t::
 ~] & t::
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
+    other_key_pressed := 1
 
     if WinExist("Microsoft Teams") {
         WinActivate
     }
-;    ; Get executable of current window
-;    WinGet, curExe, ProcessName, A
-
-;    if (lastExe != curExe) {
-;        ; Create new auto-incrementing group name to separate groups each time this is invoked.
-;        gdzCurrent = gdzCurrent%groupNum%
-;        groupNum := groupNum + 1
-;    }
-
-;    ; Add all matching windows to this group
-;    GroupAdd, %gdzCurrent%, ahk_exe %curExe%
-
-;    ; Cycle through the windows
-;    GroupActivate, %gdzCurrent%, r
-
-;    ;Store exe for comparison next time
-;    lastExe := curExe
 return
 
 ;;;;; Terminals
 ~CapsLock & g::
 ~] & g::
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
+    other_key_pressed := 1
 
     GroupAdd, gdzMintty, ahk_class mintty
     GroupAdd, gdzMintty, ahk_class ConsoleWindowClass
@@ -553,8 +469,7 @@ return
 ;;;;; VIM
 ~CapsLock & v::
 ~] & v::
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
+    other_key_pressed := 1
     ActivateVim()
 return
 
@@ -569,24 +484,28 @@ ActivateVim() {
     }
 }
 
-;;;;; Copy text into a new vim buffer
+;;;;; Copy text into a new buffer, or open a file from explorer.exe
 ~CapsLock & Enter::
 ~] & Enter::
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
-    class := "Vim"
-    Send ^c
-    ActivateVim()
-    Send {Esc}{Esc}`;enew{Enter}
-    Sleep 100
-    Send {Esc}{Esc}PG{Esc}k
+    other_key_pressed := 1
+    
+    if(WinActive("ahk_exe explorer.exe")) {
+        OpenVim()
+        ;MsgBox,,,Hello,3
+    } else {
+        class := "Vim"
+        Send ^c
+        ActivateVim()
+        Send {Esc}{Esc}`;enew{Enter}
+        Sleep 100
+        Send {Esc}{Esc}PG{Esc}k
+    }
 return
 
 ;;;;; Copy text into existing vim buffer
 ~CapsLock & \::
 ~] & \::
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
+    other_key_pressed := 1
     class := "Vim"
     Send ^c
     ActivateVim()
@@ -597,8 +516,7 @@ return
 ;;;;; Explorer.exe
 ~CapsLock & e::
 ~] & e::
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
+    other_key_pressed := 1
     class:="CabinetWClass"
     GroupAdd, gdzExplorer, ahk_class %class%
     if WinActive("ahk_group gdzExplorer") {
@@ -611,8 +529,7 @@ return
 ;;;;; Web browser(s)
 ~CapsLock & r::
 ~] & r::
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
+    other_key_pressed := 1
     GroupAdd, gdzBrowsers, ahk_class MozillaWindowClass
     GroupAdd, gdzBrowsers, ahk_exe chrome.exe
     if WinActive("ahk_group gdzBrowsers") {
@@ -625,8 +542,7 @@ return
 ;;;;; Outlook
 ~CapsLock & a::
 ~] & a::
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
+    other_key_pressed := 1
     progExe:="OUTLOOK.EXE"
     GroupAdd, gdzOutlook, ahk_exe %progExe%
     if WinActive("ahk_group gdzOutlook") {
@@ -639,8 +555,7 @@ return
 ;;;;; Slack
 ~CapsLock & s::
 ~] & s::
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
+    other_key_pressed := 1
     if WinExist("Slack.*Calabrio") {
         WinActivate
     }
@@ -649,8 +564,7 @@ return
 ;;;;; IntelliJ
 ~CapsLock & d::
 ~] & d::
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
+    other_key_pressed := 1
     GroupAdd, gdzIntellij, ahk_exe idea64.exe
     if WinActive("ahk_group gdzIntellij") {
         GroupActivate, gdzIntellij, r
@@ -659,24 +573,25 @@ return
     }
 return
 
-;;;;; SSMS
+;;;;; SSMS & Vis Studio
 ~CapsLock & c::
 ~] & c::
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
-    GroupAdd, gdzVisStudio, ahk_exe devenv.exe
-    if WinActive("ahk_group gdzVisStudio") {
-        GroupActivate, gdzVisStudio, r
+    other_key_pressed := 1
+    GroupAdd, gdzSQL, .*- Microsoft Visual Studio
+    GroupAdd, gdzSQL, ahk_exe Ssms.exe
+    if WinActive("ahk_group gdzSQL") {
+        GroupActivate, gdzSQL, r
     } else {
-        WinActivate ahk_exe devenv.exe
+        WinActivate ahk_group gdzSQL
     }
+;    WinGet, c, Count, ahk_group gdzSQL
+;    MsgBox, c(%c%)
 return
 
 ;;;;; Notepad++
 ~CapsLock & n::
 ~] & n::
-    caps_other_key_pressed := 1
-    pressed_twice_flag := 0
+    other_key_pressed := 1
     GroupAdd, gdzNpp, ahk_class Notepad++
     if WinActive("ahk_class Notepad++") {
         GroupActivate, gdzNpp, r
@@ -729,7 +644,6 @@ return
 
 ;;;;; {{{1 Routine non-secure uname/passwords
 #`::
-#=::
     Input keyPressed, L1 T2,, 1,2
     if (keyPressed = "``") {
         Send {Backspace}
@@ -824,6 +738,8 @@ OpenVim(Admin="") {
     ; to elevate the next gVim session. It doesn't elevate the current existing
     ; "GVIM" session, but opens a new one named "ADMIN MODE".
     path_name := % Explorer_GetSelection()
+    ;MsgBox ,,,path name: %path_name%, 3
+    
     if (Admin) {
         Run *RunAs C:\Program Files\Vim\vim81\gvim.exe --servername "ADMIN MODE" --remote-silent "%path_name%",,,OutputVarPID
     }
