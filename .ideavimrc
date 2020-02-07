@@ -10,8 +10,17 @@ set ignorecase
 set smartcase
 set showmode
 set number
-"set relativenumber
+set relativenumber
 set surround
+
+" In order to get single-comma easymotion-leader to work, I have to make the '\' key leader, then
+" easymotion sets up '\\' (double leader keypress) as the normal mode binding, and then I can map
+" ',' to '\\'
+let mapleader = "\"
+set easymotion
+nnoremap , \\
+
+"Finally, let spacebar be actual leader key
 let mapleader = " "
 
 " {{{1 ===== Normal mode commands (no leader key) =====
@@ -53,11 +62,11 @@ nnoremap <Leader>W       :action com.mnw.tabmover.actions.MoveTabToNewWindow<CR>
 nnoremap <Leader>w       :action com.mnw.tabmover.actions.MoveTabToNextSplitter<CR>
 nnoremap <Leader>e       :action RecentChangedFiles<CR>
 nnoremap <Leader>r       :action RecentFiles<CR>
+nnoremap <Leader>R       :action RenameElement<CR>
 nnoremap <Leader>t       :action GotoTest<CR>
 nnoremap <Leader>T       :action ShowRecentTests<CR>
 
 nnoremap <Leader>y       :action QuickJavaDoc<CR>
-"nnoremap <Leader>u       :action ShowUsages<CR>
 nnoremap <Leader>i       :action QuickImplementations<CR>
 nnoremap <Leader>o       :action FileStructurePopup<CR>
 nnoremap <Leader>p       :action ParameterInfo<CR>
@@ -66,10 +75,8 @@ nnoremap <Leader>P       :action ToggleInlineHintsAction<CR>
 nnoremap <Leader>a       :action GotoAction<CR>
 vnoremap <Leader>a       :action GotoAction<CR>
 nnoremap <Leader>s       :action ActivateStructureToolWindow<CR>
-"nnoremap <Leader>d       :action QuickImplementations<CR>
 nnoremap <Leader>f       :action FindInPath<CR>
 nnoremap <Leader>g       :action Generate<CR>
-vnoremap <Leader>g       :action Generate<CR>
 
 nnoremap <Leader>j       :action Forward<CR>
 nnoremap <Leader>k       :action Back<CR>
@@ -86,6 +93,7 @@ nnoremap <Leader>m       :action CloseEditor<CR>
 nnoremap <Leader>M       :action ReopenClosedTab<CR>
 nnoremap <Leader>,       :action PreviousTab<CR>
 nnoremap <Leader>.       :action NextTab<CR>
+nnoremap <Leader>/       <c-/>
 
 
 " }}}1 =====            Debug related             ===== {{{1

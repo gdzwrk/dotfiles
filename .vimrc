@@ -100,8 +100,6 @@ nnoremap gj j
 nnoremap gk k
 
 "Move current line(s) up or down
-"nnoremap J :m .+1<CR>
-"nnoremap K :m .-2<CR>
 vnoremap J :m '>+1<CR>gv
 vnoremap K :m '<-2<CR>gv
 
@@ -284,7 +282,7 @@ nnoremap # #zz
 nnoremap <silent> <Leader>c :nohl<CR>
 
 "Copy line number into * register
-nnoremap <silent> ,n <Esc>:let @*=line(".")<CR>:echom "Copied line #: " @*<CR>
+"nnoremap <silent> ,n <Esc>:let @*=line(".")<CR>:echom "Copied line #: " @*<CR>
 
 "Fold all lines that do not match search expression
 nnoremap <Leader>z :setlocal foldexpr=(getline(v:lnum)=~@/)?0:(getline(v:lnum-1)=~@/)\\|\\|(getline(v:lnum+1)=~@/)?1:2 foldmethod=expr foldlevel=0 foldcolumn=2<CR>
@@ -672,16 +670,16 @@ hi LineNr   ctermfg=11 ctermbg=236 guibg=#444444
 call plug#begin('~/.vim/plugged')
     Plug 'junegunn/fzf'
     Plug 'junegunn/fzf.vim'
-    Plug 'junegunn/vim-peekaboo'
+    Plug 'junegunn/vim-peekaboo'     "See register contents
 
-    Plug 'tpope/vim-characterize'
-    Plug 'tpope/vim-unimpaired'
-    Plug 'tpope/vim-fugitive'
-    Plug 'tpope/vim-surround'
-    Plug 'tpope/vim-abolish'
+    Plug 'tpope/vim-characterize'    "Show more char info with ga
+    Plug 'tpope/vim-unimpaired'      "Set a bunch of sane defaults? I think?
+    Plug 'tpope/vim-fugitive'        "Git plugin
+    Plug 'tpope/vim-surround'        "Surround with things
+    Plug 'tpope/vim-abolish'         "Fix things, change text? Not being used much
  "   Plug 'tpope/vim-dadbod'
-    Plug 'tpope/vim-repeat'
-    Plug 'tpope/vim-jdaddy'
+    Plug 'tpope/vim-repeat'          "Allow repeating non-builtin commands
+    Plug 'tpope/vim-jdaddy'          "Don't remember?
 
     Plug 'vim-airline/vim-airline-themes'
     Plug 'vim-airline/vim-airline'
@@ -689,6 +687,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'kana/vim-textobj-user'
     Plug 'kana/vim-textobj-line'
     Plug 'saihoooooooo/vim-textobj-space'
+    Plug 'easymotion/vim-easymotion'
 
     Plug 'vim-scripts/SQLUtilities'
     Plug 'vim-scripts/Align'
@@ -700,6 +699,9 @@ call plug#begin('~/.vim/plugged')
     Plug 'christoomey/vim-tmux-navigator'
     Plug 'cosminadrianpopescu/vim-tail'
 call plug#end()
+
+" Easymotion leader key
+map , <Plug>(easymotion-prefix)
 
 " Airline Configuration
 let g:airline_powerline_fonts = 1
