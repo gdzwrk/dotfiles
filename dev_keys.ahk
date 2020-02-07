@@ -54,7 +54,40 @@ CapsLock::
     SetCapsLockState, Off
 return
 
-; Use right square bracket as second global modifier hotkey.
+;Application-specific remapping
+#IfWinActive ahk_exe EliteDangerous64.exe
+
+CapsLock::
+    Send {ScrollLock}
+    SetCapsLockState, Off
+return
+
+CapsLock & q::q
+CapsLock & e::e
+CapsLock & r::r
+CapsLock & t::t
+
+CapsLock & w::Up
+CapsLock & s::Down
+CapsLock & a::Left
+CapsLock & d::Right
+CapsLock & f::F7
+CapsLock & g::g
+
+CapsLock & z::z
+CapsLock & x::x
+CapsLock & c::c
+CapsLock & v::v
+CapsLock & b::b
+CapsLock & n::n
+CapsLock & p::p
+return
+#IfWinActive
+
+; Add ']' as a right-hand modifier key. Disable it on first press-
+; send when released if no other key combo was used.
+; skip_bracket stuff had to be added to prevent '}]' input  
+; when shift and brace key were release in a specific timing.
 ]::
 }::
     shift_state_on_depress := GetKeyState("Shift")
