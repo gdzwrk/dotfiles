@@ -56,12 +56,29 @@ return
 
 ;Application-specific remapping
 #IfWinActive ahk_exe EliteDangerous64.exe
-CapsLock::CapsLock
+
+CapsLock::
+    Send {CapsLock}
+return
+CapsLock & q::q
+CapsLock & e::e
+CapsLock & r::r
+CapsLock & t::t
+
 CapsLock & w::Up
 CapsLock & s::Down
 CapsLock & a::Left
 CapsLock & d::Right
 CapsLock & f::F7
+CapsLock & g::g
+
+CapsLock & z::z
+CapsLock & x::x
+CapsLock & c::c
+CapsLock & v::v
+CapsLock & b::b
+CapsLock & n::n
+CapsLock & p::p
 return
 #IfWinActive
 
