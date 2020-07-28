@@ -10,16 +10,16 @@ set ignorecase
 set smartcase
 set showmode
 set number
-set relativenumber
+set norelativenumber
 set surround
 
 " In order to get single-comma easymotion-leader to work, I have to make the '\' key leader, then
 " easymotion sets up '\\' (double leader keypress) as the normal mode binding, and then I can map
 " ',' to '\\'
-let mapleader = "\"
-set easymotion
-map , \\
-map ,. ,s
+"let mapleader = "\"
+"set easymotion
+"map , \\
+"map ,. ,s
 
 "Finally, let spacebar be actual leader key
 let mapleader = " "
@@ -27,15 +27,15 @@ let mapleader = " "
 " {{{1 ===== Normal mode commands (no leader key) =====
 
 " 'Go-to' mappings
-nnoremap gg gg
-nnoremap gi  :action GotoImplementation<CR>
-nnoremap gD  :action GotoSuperMethod<CR>
-nnoremap gs  :action GotoSuperMethod<CR>
+nnoremap gg   gg
+nnoremap gi   :action GotoImplementation<CR>
+nnoremap gD   :action GotoSuperMethod<CR>
+nnoremap gs   :action GotoSuperMethod<CR>
 nnoremap gtd  :action GotoTypeDeclaration<CR>
-nnoremap gd  :action GotoDeclaration<CR>
-nnoremap gth :action TypeHierarchy<CR>
-nnoremap gu  :action ShowUsages<CR>
-nnoremap gch :action CallHierarchy<CR>
+nnoremap gd   :action GotoDeclaration<CR>
+nnoremap gth  :action TypeHierarchy<CR>
+nnoremap gu   :action ShowUsages<CR>
+nnoremap gch  :action CallHierarchy<CR>
 
 nnoremap g$  :action GoToLastTab<CR>
 nnoremap g0  :action GoToTab1<CR>
@@ -70,7 +70,7 @@ nnoremap <leader><space> :action HideAllWindows<CR>
 
 nnoremap <Leader>W       :action com.mnw.tabmover.actions.MoveTabToNewWindow<CR>
 nnoremap <Leader>w       :action com.mnw.tabmover.actions.MoveTabToNextSplitter<CR>
-nnoremap <Leader>R       :action RecentChangedFiles<CR>
+nnoremap <Leader>R       :action ChooseRunConfiguration<CR>
 nnoremap <Leader>r       :action RecentFiles<CR>
 nnoremap <Leader>e       :action RenameElement<CR>
 vnoremap <Leader>e       :action RenameElement<CR>
@@ -89,6 +89,7 @@ vnoremap <Leader>a       :action GotoAction<CR>
 nnoremap <Leader>s       :action ActivateStructureToolWindow<CR>
 nnoremap <Leader>f       :action FindInPath<CR>
 nnoremap <Leader>g       :action Generate<CR>
+nnoremap <leader>h       :action HideAllWindows<CR>
 
 nnoremap <Leader>j       :action Forward<CR>
 nnoremap <Leader>k       :action Back<CR>
@@ -97,7 +98,11 @@ vnoremap v               :action QuickEvaluateExpression<CR>
 vnoremap <Leader>v       :action EvaluateExpression<CR>
 nnoremap <Leader>v       :action QuickEvaluateExpression<CR>
 nnoremap <Leader>b       :action ToggleLineBreakpoint<CR>
+nnoremap <Leader>c       :nohl<CR>
 
+nnoremap <Leader>m       :action CloseEditor<CR>
+nnoremap <Leader>M       :action ReopenClosedTab<CR>
+nnoremap <Leader>,       :action PreviousTab<CR>
 nnoremap <Leader>m       :action CloseEditor<CR>
 nnoremap <Leader>M       :action ReopenClosedTab<CR>
 nnoremap <Leader>,       :action PreviousTab<CR>
@@ -105,6 +110,8 @@ nnoremap <Leader>.       :action NextTab<CR>
 nnoremap <Leader><a-,>   :action com.mnw.tabmover.actions.MoveTabToPreviousSplitter<CR> 
 nnoremap <Leader><a-.>   :action com.mnw.tabmover.actions.MoveTabToNextSplitter<CR> 
 nnoremap <Leader>/       <c-/>
+
+nnoremap <Leader><BackSpace> :action ShowIntentionActions<CR>
 
 "Add semicolon to the end of current line
 nnoremap <leader>;       mzA;<Esc>`z
@@ -153,6 +160,7 @@ nnoremap \ws       :action EditorToggleShowWhitespaces<CR>
 
 nnoremap \h        :action Vcs.ShowTabbedFileHistory<CR>
 nnoremap \lh       :action LocalHistory.ShowHistory<CR>
+nnoremap \lc       :action Vcs.Show.Local.Changes<cr>
 nnoremap \oim      :action OptimizeImports<CR>
 nnoremap \str      :action StreamTracerAction<CR>
 
@@ -199,7 +207,10 @@ inoremap <a-j> <Esc><c-e>a
 inoremap <a-k> <Esc><c-y>a
 inoremap <a-l> <Esc>8zla
 
-"Remap ctrl+move keys to move between windows/splits
+vnoremap <a-h> 8zh
+vnoremap <a-j> <Esc><c-e>gv
+vnoremap <a-k> <Esc><c-y>gv
+vnoremap <a-l> 8zl
 nnoremap <c-h>       :action com.mnw.tabmover.actions.MoveFocusToPreviousWindow<CR>
 nnoremap <c-l>       :action com.mnw.tabmover.actions.MoveFocusToNextWindow<CR>
 
@@ -211,10 +222,11 @@ nnoremap k  gk
 vnoremap d "dd
 
 "Windows-style cut/copy/paste
-nnoremap <C-S-i> <C-x>
-nnoremap <c-a> ggVG
-vnoremap <c-x> d
-vnoremap <c-c> y
+"nnoremap <C-S-i> <C-x>
+"nnoremap <c-a> ggVG
+"vnoremap <c-x> d
+"vnoremap <c-c> y
+nnoremap <c-v> p
 vnoremap <c-v> <Esc>:set paste<CR>P:set nopaste<CR>gv
 inoremap <c-v> <Esc>:set paste<CR>P:set nopaste<CR>a
 
@@ -272,3 +284,4 @@ nnoremap <c-=> :action EditorIncreaseFontSize<CR>
 "the same letter. i.e. i have <leader>ws and <leader>wr.
 
 "}}}1
+

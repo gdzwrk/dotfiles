@@ -628,22 +628,21 @@ if has("gui_running") "Define everything for gVim
     set shellcmdflag=/c
     set shellxquote=
     set shellpipe=>
+    set guifont=DejaVu_Sans_Mono_for_Powerline:h12:cANSI:qDRAFT
     "set shell=wsl.exe
     "set shellpipe=|
     "set shellredir=>
     "set shellcmdflag=
 
     " Automatically save/restore session
-    autocmd VIMEnter * :source ~/.vim/session.vim | simalt ~r | simalt ~x
-    autocmd VIMLeave * :mksession! ~/.vim/session.vim
+    "autocmd VIMEnter * :source ~/.vim/session.vim | simalt ~r | simalt ~x
+    "autocmd VIMLeave * :mksession! ~/.vim/session.vim
 
     "Change font sizes
-    "nnoremap + :silent! let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)+1 > 24 ? 24 : submatch(0)+1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
-    "nnoremap _ :silent! let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)-1 < 6 ? 6 : submatch(0)-1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
-    nnoremap <c-=> :silent! let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)+1 > 24 ? 24 : submatch(0)+1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
-    nnoremap <c--> :silent! let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)-1 < 6 ? 6 : submatch(0)-1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
-    nnoremap <leader>= :let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)+1 > 24 ? 24 : submatch(0)+1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
-    nnoremap <leader>- :let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)-1 < 6 ? 6 : submatch(0)-1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
+    nnoremap <c-=> :silent! let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)+1 > 24 ? 24 : submatch(0)+1)', 'g')<CR>:echom "Font:"&gfn<CR>
+    nnoremap <c--> :silent! let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)-1 < 6 ? 6 : submatch(0)-1)', 'g')<CR>:redraw<CR>:echom "Font:"&gfn<CR>
+    nnoremap <leader>= :let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)+1 > 24 ? 24 : submatch(0)+1)', 'g')<CR>:redraw<CR>:echom "Font:"&gfn<CR>
+    nnoremap <leader>- :let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)-1 < 6 ? 6 : submatch(0)-1)', 'g')<CR>:redraw<CR>:echom "Font:"&gfn<CR>
 
 else   "Define anything that should only execute when not using gVim
     if &term == "xterm-256color" "This is for git-bash

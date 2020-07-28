@@ -50,6 +50,9 @@ CapsLock::
         Send {Esc}
     } else {
         other_key_pressed := 0
+        if !WinActive("Slack.*Calabrio") {
+            Send {Alt up}
+        }
     }
     SetCapsLockState, Off
 return
@@ -90,14 +93,14 @@ return
 ; when shift and brace key were release in a specific timing.
 ]::
 }::
-    shift_state_on_depress := GetKeyState("Shift")
     ;MsgBox,,, 'shift_state_on_depress is:' %shift_state_on_depress%, 0.5
     KeyWait, ]
+    shift_state_on_depress := GetKeyState("Shift")
     if (other_key_pressed = 0){
         if (shift_state_on_depress) {
             SendRaw }
         }  else {
-            Send ]
+            SendRaw ]
         } 
     } else {
         other_key_pressed := 0
@@ -227,7 +230,7 @@ return
 return
 
 ~CapsLock & [::
-] & [::
+~] & [::
 ^[::
     Send {Esc}
     other_key_pressed := 1
@@ -437,7 +440,10 @@ return
 
 ~CapsLock & f::
 ~] & f::
-    Send {Alt down}{Tab}{Alt up}
+    ;Send {Alt down}{Tab}{Alt up}
+    Send {Alt down}
+    Send {Tab}
+    other_key_pressed := 1
 return
 
 ;;;;; Use VIM navigation in Alt+Tab window
@@ -463,9 +469,12 @@ return
 ~CapsLock & t::
 ~] & t::
     other_key_pressed := 1
+    groupAdd, gdzTeams, ahk_exe Teams.exe
 
-    if WinExist("Microsoft Teams") {
-        WinActivate
+    if WinExist("ahk_group gdzTeams") {
+        GroupActivate, gdzTeams, r
+    } else {
+        WinActivate ahk_group gdzTeams
     }
 return
 
@@ -581,6 +590,7 @@ return
         WinActivate
     }
 return
+
 #IfWinActive ahk_exe slack.exe
 CapsLock & [::!Left
 CapsLock & ]::!Right
@@ -731,7 +741,7 @@ return
 #IfWinActive
 
 ;;;;; Fun sounds
-!+^0::SoundPlay, C:\Windows\Media\Windows Ding.wav
+;!+^0::SoundPlay, C:\Windows\Media\Windows Ding.wav
 ;;;;; }}}1
 
 ; {{{1 OpenVim.ahk
@@ -772,10 +782,10 @@ OpenVim(Admin="") {
     ;MsgBox ,,,path name: %path_name%, 3
     
     if (Admin) {
-        Run *RunAs C:\Program Files\Vim\vim81\gvim.exe --servername "ADMIN MODE" --remote-silent "%path_name%",,,OutputVarPID
+        Run *RunAs C:\Program Files\Vim\vim82\gvim.exe --servername "ADMIN MODE" --remote-silent "%path_name%",,,OutputVarPID
     }
     else {
-        Run, C:\Program Files\Vim\vim81\gvim.exe --servername "GVIM" --remote-silent "%path_name%",,,OutputVarPID
+        Run, C:\Program Files\Vim\vim82\gvim.exe --servername "GVIM" --remote-silent "%path_name%",,,OutputVarPID
     }
     return
 }
