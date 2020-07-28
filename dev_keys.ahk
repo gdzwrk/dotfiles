@@ -608,11 +608,25 @@ CapsLock & ]::!Right
     }
 return
 
-;;;;; SSMS & Vis Studio
+;;;;; vscode & Vis Studio
 ~CapsLock & c::
 ~] & c::
     other_key_pressed := 1
-    GroupAdd, gdzSQL, .*- Microsoft Visual Studio
+    GroupAdd, gdzVS, .*- Microsoft Visual Studio
+    GroupAdd, gdzVS, ahk_exe Code.exe
+    if WinActive("ahk_group gdzVS") {
+        GroupActivate, gdzVS, r
+    } else {
+        WinActivate ahk_group gdzVS
+    }
+;    WinGet, c, Count, ahk_group gdzVS
+;    MsgBox, c(%c%)
+return
+
+;;;;; SSMS
+~CapsLock & x::
+~] & x::
+    other_key_pressed := 1
     GroupAdd, gdzSQL, ahk_exe Ssms.exe
     if WinActive("ahk_group gdzSQL") {
         GroupActivate, gdzSQL, r
