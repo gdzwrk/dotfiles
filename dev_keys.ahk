@@ -260,6 +260,7 @@ return
     other_key_pressed := 1
 return
 
+~CapsLock & F4::
 ~CapsLock & Del::
 ~] & Del::
     SetCapsLockState, Off
@@ -564,6 +565,7 @@ return
     other_key_pressed := 1
     progExe:="OUTLOOK.EXE"
     GroupAdd, gdzOutlook, ahk_exe %progExe%
+    GroupAdd, gdzOutlook, ".*Reminder(s)"
     if WinActive("ahk_group gdzOutlook") {
         GroupActivate, gdzOutlook, r
     } else {
@@ -579,6 +581,10 @@ return
         WinActivate
     }
 return
+#IfWinActive ahk_exe slack.exe
+CapsLock & [::!Left
+CapsLock & ]::!Right
+#IfWinActive
 
 ;;;;; IntelliJ
 ~CapsLock & d::
@@ -716,6 +722,12 @@ return
 ;;;;; Remap Ctrl+W to close window in Outlook
 #IfWinActive ahk_class rctrl_renwnd32
 ^w::Send !fc
+F8::
+F9::
+    Send ^q
+    Sleep 50
+    Send ^+1
+return
 #IfWinActive
 
 ;;;;; Fun sounds

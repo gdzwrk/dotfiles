@@ -1,5 +1,5 @@
 ".ideavimrc file by garrett deZeeuw {{{1
-set timeout ttimeoutlen=500
+set timeout ttimeoutlen=700
 set clipboard+=unnamed            "Use system clipboard when yanking
 set virtualedit=all              "Allow cursor to move into empty space
 set sidescrolloff=16
@@ -18,7 +18,8 @@ set surround
 " ',' to '\\'
 let mapleader = "\"
 set easymotion
-nnoremap , \\
+map , \\
+map ,. ,s
 
 "Finally, let spacebar be actual leader key
 let mapleader = " "
@@ -39,13 +40,11 @@ nnoremap gch :action CallHierarchy<CR>
 nnoremap g$  :action GoToLastTab<CR>
 nnoremap g0  :action GoToTab1<CR>
 
-
 " Font size/zooming
-"nnoremap zi  :action EditorIncreaseFontSize<CR>
-nnoremap <a-i>  :action EditorIncreaseFontSize<CR>
-"nnoremap zo  :action EditorDecreaseFontSize<CR>
-nnoremap <a-o>  :action EditorDecreaseFontSize<CR>
-nnoremap <a-r>  :action EditorResetFontSize<CR>
+nnoremap <c-=>    :action EditorIncreaseFontSize<CR>
+nnoremap <c-->    :action EditorDecreaseFontSize<CR>
+nnoremap <c-s-=>  :action EditorResetFontSize<CR>
+nnoremap <c-s-->  :action EditorResetFontSize<CR>
 
 " Code folding
 nnoremap zC  :action CollapseRegionRecursively<CR>
@@ -55,14 +54,26 @@ nnoremap zO  :action ExpandRegionRecursively<CR>
 nnoremap [[  :action MethodUp<CR>
 nnoremap ]]  :action MethodDown<CR>
 
+" Display parameter info while in insert mode
+inoremap <c-p>   <Esc>:action ParameterInfo<CR>a
+
+" Move lines up/down with Ctrl+j and Ctrl+k
+nnoremap <c-k> :action MoveStatementUp<CR>
+nnoremap <c-j> :action MoveStatementDown<CR> 
+
+vnoremap <c-k> :action MoveStatementUp<CR>    
+vnoremap <c-j> :action MoveStatementDown<CR>  
+
+nnoremap vil ^v$h
 " }}}1 =====      Leader key mappings for IDE     ===== {{{1
 nnoremap <leader><space> :action HideAllWindows<CR>
 
 nnoremap <Leader>W       :action com.mnw.tabmover.actions.MoveTabToNewWindow<CR>
 nnoremap <Leader>w       :action com.mnw.tabmover.actions.MoveTabToNextSplitter<CR>
-nnoremap <Leader>e       :action RecentChangedFiles<CR>
+nnoremap <Leader>R       :action RecentChangedFiles<CR>
 nnoremap <Leader>r       :action RecentFiles<CR>
-nnoremap <Leader>R       :action RenameElement<CR>
+nnoremap <Leader>e       :action RenameElement<CR>
+vnoremap <Leader>e       :action RenameElement<CR>
 nnoremap <Leader>t       :action GotoTest<CR>
 nnoremap <Leader>T       :action ShowRecentTests<CR>
 
@@ -71,6 +82,7 @@ nnoremap <Leader>i       :action QuickImplementations<CR>
 nnoremap <Leader>o       :action FileStructurePopup<CR>
 nnoremap <Leader>p       :action ParameterInfo<CR>
 nnoremap <Leader>P       :action ToggleInlineHintsAction<CR>
+nnoremap <Leader><a-p>   :action ParameterInfo<CR>
 
 nnoremap <Leader>a       :action GotoAction<CR>
 vnoremap <Leader>a       :action GotoAction<CR>
@@ -81,32 +93,42 @@ nnoremap <Leader>g       :action Generate<CR>
 nnoremap <Leader>j       :action Forward<CR>
 nnoremap <Leader>k       :action Back<CR>
 
+vnoremap v               :action QuickEvaluateExpression<CR>
+vnoremap <Leader>v       :action EvaluateExpression<CR>
 nnoremap <Leader>v       :action QuickEvaluateExpression<CR>
-vnoremap <Leader>v       :action QuickEvaluateExpression<CR>
-nnoremap <Leader>V       :action EvaluateExpression<CR>
 nnoremap <Leader>b       :action ToggleLineBreakpoint<CR>
-nnoremap <Leader>B       :action ToggleBreakpointEnabled<CR>
-nnoremap <Leader><a-b>   :action EditBreakpoint<CR>
-nnoremap <Leader><c-b>   :action XDebugger.MuteBreakpoints<CR>
 
 nnoremap <Leader>m       :action CloseEditor<CR>
 nnoremap <Leader>M       :action ReopenClosedTab<CR>
 nnoremap <Leader>,       :action PreviousTab<CR>
 nnoremap <Leader>.       :action NextTab<CR>
+nnoremap <Leader><a-,>   :action com.mnw.tabmover.actions.MoveTabToPreviousSplitter<CR> 
+nnoremap <Leader><a-.>   :action com.mnw.tabmover.actions.MoveTabToNextSplitter<CR> 
 nnoremap <Leader>/       <c-/>
 
+"Add semicolon to the end of current line
+nnoremap <leader>;       mzA;<Esc>`z
 
 " }}}1 =====            Debug related             ===== {{{1
-"nnoremap <Leader>i       :action StepInto<CR>
-"nnoremap <Leader>o       :action StepOver<CR>
-"nnoremap <Leader>O       :action StepOut<CR>
-"nnoremap <Leader>R       :action RunToCursor<CR>
-
-nnoremap <Leader><c-d>   :action DebugClass<CR>
-nnoremap <Leader><c-r>   :action RunClass<CR>
 nnoremap <Leader><a-d>   :action ChooseDebugConfiguration<CR>
-nnoremap <Leader><a-r>   :action ChooseRunConfiguration<CR>
+nnoremap <Leader><c-d>   :action DebugClass<CR>
 
+nnoremap <Leader><a-r>   :action ChooseRunConfiguration<CR>
+nnoremap <Leader><c-r>   :action RunClass<CR>
+
+nnoremap <Leader><c-l>   :action ShowExecutionPoint<CR>
+nnoremap <Leader><c-h>   :action RunToCursor<CR>
+nnoremap <Leader><c-s>   :action Stop<CR>
+nnoremap <Leader><c-t>   :action Rerun<CR>
+nnoremap <Leader><c-j>   :action Resume<CR>
+nnoremap <Leader><c-k>   :action Debugger.PopFrame<CR>
+
+"Breakpoints
+nnoremap <Leader><a-b>   :action ToggleBreakpointEnabled<CR>
+nnoremap <Leader><c-b>   :action ViewBreakpoints<CR>
+nnoremap <Leader><c-m>   :action XDebugger.MuteBreakpoints<CR>
+"stop debugging
+"
 
 " }}}1 =====   Tab and window switching/moving    ===== {{{1
 nnoremap <a-,>     :action com.mnw.tabmover.actions.MoveTabUpAction<CR>
@@ -164,12 +186,18 @@ vnoremap m <Esc>
 nnoremap <C-[>  <Esc>
 inoremap jk     <Esc>l
 inoremap <Esc>  <Esc>l
+inoremap <a-p>  <Esc>:action ParameterInfo<CR>a
 
 "Scroll the screen without moving cursor using Alt+hjkl
 nnoremap <a-h> 8zh
 nnoremap <a-j> <c-e>
 nnoremap <a-k> <c-y>
 nnoremap <a-l> 8zl
+
+inoremap <a-h> <Esc>8zha
+inoremap <a-j> <Esc><c-e>a
+inoremap <a-k> <Esc><c-y>a
+inoremap <a-l> <Esc>8zla
 
 "Remap ctrl+move keys to move between windows/splits
 nnoremap <c-h>       :action com.mnw.tabmover.actions.MoveFocusToPreviousWindow<CR>

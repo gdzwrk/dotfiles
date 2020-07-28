@@ -32,5 +32,5 @@ nnoremap <Leader>m :q!<cr>
 nnoremap <Leader>n :vsc SQLServerObjectExplorerNewQueryOnToolbar<cr>
 
 nnoremap <Leader>c :nohl<cr>
-
+nnoremap ,,        :vsc Tools.InvokeAceJumpCommand<cr>
 

@@ -6,7 +6,8 @@ scriptencoding utf-8
 set encoding=utf-8
 set runtimepath+=~/.vim/         "Share plugin directory between terminal vim and gVim
 let g:netrw_home="~/.vim/"       "Put .netrwhist with everything else
-set directory^=$HOME/.vim/swapfiles//
+"set directory^=$HOME/.vim/swapfiles//
+set directory=$HOME/.vim/swapfiles//,.
 set undodir=~/.vim/undodir
 set undofile
 set viewdir=~/.vim/view
@@ -100,8 +101,8 @@ nnoremap gj j
 nnoremap gk k
 
 "Move current line(s) up or down
-vnoremap J :m '>+1<CR>gv
-vnoremap K :m '<-2<CR>gv
+"vnoremap J :m '>+1<CR>gv
+"vnoremap K :m '<-2<CR>gv
 
 "Make insert mode arrow keys great again
 inoremap OA <Up>
@@ -299,6 +300,9 @@ inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "<C-k>"
 "}}}1
 
 "##### Custom Commands and Functions ##### {{{1
+
+"Read shell command into scratch buffer
+command! -nargs=* -complete=shellcmd R vnew | setlocal buftype=nofile bufhidden=hide noswapfile | r !<args>
 
 "Mappings to invoke commands below
 nnoremap \dfms :DateFromMs<CR>
@@ -618,7 +622,7 @@ exec "imap \e".c." <A-".c.">"
 let c = nr2char(1+char2nr(c))
 endw
 
-if has("gui_running")
+if has("gui_running") "Define everything for gVim
     set guioptions=g!c
     set shell=cmd.exe
     set shellcmdflag=/c
@@ -640,19 +644,24 @@ if has("gui_running")
     nnoremap <c--> :silent! let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)-1 < 6 ? 6 : submatch(0)-1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
     nnoremap <leader>= :let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)+1 > 24 ? 24 : submatch(0)+1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
     nnoremap <leader>- :let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)-1 < 6 ? 6 : submatch(0)-1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
-else
-    "Define anything that should only execute when not using gVim
+
+else   "Define anything that should only execute when not using gVim
+    if &term == "xterm-256color" "This is for git-bash
+        set term=builtin_xterm
+
+        "Change font sizes
+        nnoremap <c-=> :silent! let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)+1 > 24 ? 24 : submatch(0)+1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
+        nnoremap <c--> :silent! let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)-1 < 6 ? 6 : submatch(0)-1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
+
+        "Format JSON via python
+        nnoremap =j :%!python -m json.tool<CR>
+    else "Set for tmux
+        set term=tmux-256color
+    endif
+
     set shell=bash
     set shellpipe=|
     set shellredir=>
-    set term=tmux-256color
-
-    "Change font sizes
-    nnoremap <c-=> :silent! let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)+1 > 24 ? 24 : submatch(0)+1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
-    nnoremap <c--> :silent! let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)-1 < 6 ? 6 : submatch(0)-1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
-
-    "Format JSON via python
-    nnoremap =j :%!python -m json.tool<CR>
 endif
 
 "}}}1
@@ -697,13 +706,28 @@ call plug#begin('~/.vim/plugged')
     Plug 'google/vim-searchindex'
     Plug 'benknoble/vim-auto-origami'
     Plug 'christoomey/vim-tmux-navigator'
-    Plug 'cosminadrianpopescu/vim-tail'
 call plug#end()
 
-" Easymotion leader key
+" Easymotion configuration  {{{2
 map , <Plug>(easymotion-prefix)
+map ,, <Plug>(easymotion-s)
 
-" Airline Configuration
+map  ,/ <Plug>(easymotion-sn)
+omap ,/ <Plug>(easymotion-tn)
+map  ,? <Plug>(easymotion-sn)
+omap ,? <Plug>(easymotion-tn)
+
+nmap s <Plug>(easymotion-s2)
+nmap t <Plug>(easymotion-t2)
+
+" These `n` & `N` mappings are options. You do not have to map `n` & `N` to EasyMotion.
+" Without these mappings, `n` & `N` works fine. (These mappings just provide
+" different highlight method and have some other features )
+" map  n <Plug>(easymotion-next)
+" map  N <Plug>(easymotion-prev)
+" }}}2
+
+" Airline Configuration  {{{2
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_idx_mode = 1
@@ -717,6 +741,7 @@ let g:airline#extensions#tabline#fnamecollapse = 1
 "call airline#parts#define_accent('mode', 'none')
 "call airline#parts#define_accent('linenr', 'none')
 "call airline#parts#define_accent('maxlinenr', 'none')
+"}}}2
 
 "auto-origami - display foldcolumn only when folds are present
 let g:auto_origami_foldcolumn = 3

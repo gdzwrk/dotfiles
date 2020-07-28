@@ -2,7 +2,7 @@
 
 gvim () {
 #    command '/c/Program Files (x86)/vim/vim82/gvim.exe' --remote-silent "$@" &
-    command '/c/Program Files/vim/vim82/gvim.exe' --remote-silent "$@" &
+    command '/mnt/c/Program Files/Vim/vim82/gvim.exe' --remote-silent "$@" &
 }
 gvimt () { command gvim --remote-tab-silent "$@" & }
 gvimr () { command gvim --R --remote-tab-silent "$@" & }
@@ -78,6 +78,7 @@ alias 'Eiv'='vim ~/.ideavimrc'
 #Commonly used directories
 alias 'dv'='dirs -v'
 alias '@wfo'='cd /c/projects/wfo-server'
+alias '@qm'='cd /c/projects/qm'
 alias '@dev'='cd /c/dev'
 
 #Miscellaneous
