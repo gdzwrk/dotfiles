@@ -709,16 +709,16 @@ call plug#begin('~/.vim/plugged')
 call plug#end()
 
 " Easymotion configuration  {{{2
-map , <Plug>(easymotion-prefix)
-map ,, <Plug>(easymotion-s)
-
-map  ,/ <Plug>(easymotion-sn)
-omap ,/ <Plug>(easymotion-tn)
-map  ,? <Plug>(easymotion-sn)
-omap ,? <Plug>(easymotion-tn)
-
-nmap s <Plug>(easymotion-s2)
-nmap t <Plug>(easymotion-t2)
+"map , <Plug>(easymotion-prefix)
+"map ,, <Plug>(easymotion-s)
+"
+"map  ,/ <Plug>(easymotion-sn)
+"omap ,/ <Plug>(easymotion-tn)
+"map  ,? <Plug>(easymotion-sn)
+"omap ,? <Plug>(easymotion-tn)
+"
+"nmap s <Plug>(easymotion-s2)
+"nmap t <Plug>(easymotion-t2)
 
 " These `n` & `N` mappings are options. You do not have to map `n` & `N` to EasyMotion.
 " Without these mappings, `n` & `N` works fine. (These mappings just provide

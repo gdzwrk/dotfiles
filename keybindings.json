@@ -1,0 +1,93 @@
+// Place your key bindings in this file to override the defaults
+[
+  // RELOAD THE CHANGES!
+  {
+    "key": "ctrl+f7",
+    "when": "editorTextFocus",
+    "command": "workbench.action.reloadWindow",
+  }
+
+  // Moving left and right between sidebar and editor groups
+  ,{
+    "key": "ctrl+h",
+    "when": "editorTextFocus && activeEditorGroupIndex > 1",
+    "command": "workbench.action.focusPreviousGroup",
+  }
+  ,{
+    "key": "ctrl+h",
+    "when": "editorTextFocus && activeEditorGroupIndex == 1",
+    "command": "workbench.action.focusSideBar",
+  }
+  ,{
+    "key": "ctrl+l",
+    "when": "editorTextFocus",
+    "command": "workbench.action.focusNextGroup",
+  }
+  ,{
+    "key": "ctrl+shift+h",
+    "when": "editorTextFocus",
+    "command": "workbench.action.moveEditorToPreviousGroup",
+  }
+  ,{
+    "key": "ctrl+shift+l",
+    "when": "editorTextFocus",
+    "command": "workbench.action.moveEditorToNextGroup",
+  }
+
+  // Moving lines up and down
+  ,{
+      "key": "alt+j",
+      "when": "editorTextFocus",
+      "command": "editor.action.moveLinesDownAction",
+    }
+  ,{
+    "key": "alt+k",
+    "when": "editorTextFocus",
+    "command": "editor.action.moveLinesUpAction",
+  }
+
+  // Sidebar related
+  ,{
+    "key": "ctrl+h",
+    "when": "sideBarFocus",
+    "command": "",  // Do nothing, by default was bringing focus to find-in-file
+  }
+  ,{
+    "key": "ctrl+l",
+    "when": "sideBarFocus",
+    "command": "workbench.action.focusActiveEditorGroup"
+  }
+
+  //Terminal related
+  ,{
+    "key": "ctrl+h",
+    "command": "workbench.action.terminal.focusPreviousPane",
+    "when": "terminalFocus"
+  }
+  ,{
+    "key": "ctrl+j",
+    "command": "workbench.action.terminal.focus",
+    "when": "!terminalFocus"
+  }
+  ,{
+    "key": "ctrl+j",
+    // "command": "workbench.action.togglePanel",
+    "command": "", // Don't toggled when already at the bottom
+    "when": "terminalFocus"
+  }
+  ,{
+    "key": "ctrl+k",          
+    "command": "workbench.action.focusActiveEditorGroup", 
+    "when": "terminalFocus" 
+  }
+  ,{
+    "key": "ctrl+l",
+    "command": "workbench.action.terminal.focusNextPane",
+    "when": "terminalFocus"
+},
+{
+    "key": "ctrl+shift+space",
+    "command": "closeParameterHints",
+    "when": "editorFocus && parameterHintsVisible"
+}
+]

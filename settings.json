@@ -1,0 +1,165 @@
+{
+    "workbench.editor.enablePreview": true,
+    "editor.fontLigatures": true,
+    "editor.lineNumbers": "on",
+    "vim.easymotion": true,
+    "vim.incsearch": true,
+    "vim.useSystemClipboard": true,
+    "vim.useCtrlKeys": true,
+    "vim.hlsearch": true,
+    "vim.visualstar": true,
+    "vim.debug.loggingLevelForConsole": "debug",
+
+    "vim.leader": "<space>",
+    "vim.insertModeKeyBindings": [
+        {
+        "before": ["j", "k"],
+        "after": ["<Esc>"]
+        }
+    ],
+    "vim.normalModeKeyBindingsNonRecursive": [
+        // Single-character plumbing and non-leader actions
+        {
+            "before": [";"],
+            "after": [":"]
+        }
+        ,{
+            "before": [":"],
+            "after": [":"]
+        }
+        ,{
+            "before": ["k"],
+            "after": ["g", "k"]
+        }
+        ,{
+            "before": ["j"],
+            "after": ["g", "j"]
+        }
+        ,{
+            "before": ["u"],
+            "commands": ["undo"]
+        }
+        ,{
+            "before": ["U"],
+            "commands": ["redo"]
+        }
+        ,{
+            "before": ["g", "u"],  // usages
+            "commands": ["editor.action.goToReferences"]
+        }
+
+        // Leader key mappings
+        ,{ // Top row
+            "before": ["<leader>", "e"],
+            "commands": ["workbench.action.showAllEditors"]
+        }
+        ,{
+            "before": ["<leader>", "t"],
+            "commands": ["workbench.action.togglePanel", "workbench.action.focusActiveEditorGroup"]
+        }
+        ,{
+            "before": ["<leader>", "i"],
+            "commands": ["editor.action.showHover"]
+        }
+        ,{
+            "before": ["<leader>", "o"],
+            "commands": ["workbench.action.gotoSymbol"]
+        }
+        ,{
+            "before": ["<leader>", "p"],
+            "commands": ["workbench.action.quickOpen"]
+        }
+        ,{ // Home row
+            "before": ["<leader>", "a"],
+            "commands": ["workbench.action.showCommands"]
+        }
+        ,{
+            "before": ["<leader>", "h"],
+            "commands": ["workbench.action.toggleSidebarVisibility"],
+        }
+        ,{
+            "before": ["<leader>", "f"],
+            "commands": ["workbench.action.findInFiles"]
+        }
+        ,{
+            "before": ["<leader>", "j"],
+            "commands": ["workbench.action.navigateForward"]
+        }
+        ,{
+            "before": ["<leader>", "k"],
+            "commands": ["workbench.action.navigateBack"]
+        }
+        ,{ // Bottom row
+            "before": ["<leader>", "c"],
+            "commands": [":nohl"]
+        }
+        ,{
+            "before": ["<leader>", "m"],
+            "commands": ["workbench.action.closeActiveEditor"]
+        }
+        ,{
+            "before": ["<leader>", "M"],
+            "commands": ["workbench.action.reopenClosedEditor"]
+        }
+        ,{
+            "before": ["<leader>", ","],
+            "commands": ["workbench.action.previousEditorInGroup"]
+        }
+        ,{
+            "before": ["<leader>", "."],
+            "commands": ["workbench.action.nextEditorInGroup"]
+        }
+        ,{
+            "before": ["<leader>", "/"],
+            "commands": ["editor.action.commentLine"]
+        }
+        ,{
+            "before": ["<leader>", "`"],
+            "commands": ["workbench.action.openGlobalKeybindings"],
+        }
+        ,{
+            "before": ["<leader>", "~"],
+            "commands": ["workbench.action.openSettings"],
+        }
+    ],
+    
+    // Visual mode
+    "vim.visualModeKeyBindings": [
+        {
+            "before": ["/"],
+            "commands": ["editor.action.commentLine"]
+        }
+        ,{
+            "before": ["m"],
+            "after": ["<Esc>"]
+        }
+
+        // Smart selection stuff
+        ,{
+            "before": [" "],
+            "commands": ["editor.action.smartSelect.expand"]
+        }
+        ,{
+            "before": ["<backspace>"],
+            "commands": ["editor.action.smartSelect.shrink"]
+        }
+    ],
+
+    // Let these ctrl+keys go to vscode native, not vim emulation
+    "vim.handleKeys": {
+        "<C-a>": false,
+        "<C-f>": false,
+        "<C-r>": false,
+        "<C-s-space>": false,
+    },
+
+    // Terminal plumbing
+    "terminal.integrated.shell.windows": "C:\\Users\\Garrett.DeZeeuw\\AppData\\Local\\Programs\\Git\\bin\\bash.exe",
+    "terminal.integrated.shellArgs.windows": [
+        "--login"
+    ],
+    "editor.tabSize": 2,
+    "editor.wordWrap": "bounded",
+    "editor.wordWrapColumn": 160,
+    "editor.renderWhitespace": "all",
+}
