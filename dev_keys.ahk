@@ -94,14 +94,15 @@ return
 ]::
 }::
     ;MsgBox,,, 'shift_state_on_depress is:' %shift_state_on_depress%, 0.5
-    KeyWait, ]
     shift_state_on_depress := GetKeyState("Shift")
+    if (shift_state_on_depress) {
+        SendRaw }
+        other_key_pressed := 0
+        return
+    }
+    KeyWait, ]
     if (other_key_pressed = 0){
-        if (shift_state_on_depress) {
-            SendRaw }
-        }  else {
-            SendRaw ]
-        } 
+        SendRaw ]
     } else {
         other_key_pressed := 0
     }
@@ -254,14 +255,14 @@ return
 
 ;;;;; {{{2 Switcheroo and window management stuff
 
-~CapsLock & q::    ; Switcheroo
-~] & q::
-    SetCapsLockState, Off
-    Send, {LAlt down}{Ctrl down}{Shift down}
-    Send, {F9}
-    Send, {Shift up}{Ctrl up}{LAlt up}
-    other_key_pressed := 1
-return
+;~CapsLock & q::    ; Switcheroo
+;~] & q::
+;    SetCapsLockState, Off
+;    Send, {LAlt down}{Ctrl down}{Shift down}
+;    Send, {F9}
+;    Send, {Shift up}{Ctrl up}{LAlt up}
+;    other_key_pressed := 1
+;return
 
 ~CapsLock & F4::
 ~CapsLock & Del::
@@ -560,11 +561,25 @@ return
 ~] & r::
     other_key_pressed := 1
     GroupAdd, gdzBrowsers, ahk_class MozillaWindowClass
-    GroupAdd, gdzBrowsers, ahk_exe chrome.exe
+    GroupAdd, gdzBrowsers, Google Chrome ahk_exe chrome.exe
+    GroupAdd, gdzBrowsers, Microsoft Edge ahk_exe ApplicationFrameHost.exe
     if WinActive("ahk_group gdzBrowsers") {
         GroupActivate, gdzBrowsers, r
     } else {
         WinActivate ahk_group gdzBrowsers
+    }
+return
+
+;;;;; Dev tools
+~CapsLock & q::
+~] & q::
+    other_key_pressed := 1
+    GroupAdd, gdzDevTools, DevTools ahk_exe chrome.exe
+    GroupAdd, gdzDevTools, Postman ahk_exe Postman.exe
+    if WinActive("ahk_group gdzDevTools") {
+        GroupActivate, gdzDevTools, r
+    } else {
+        WinActivate ahk_group gdzDevTools
     }
 return
 

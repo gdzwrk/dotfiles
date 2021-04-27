@@ -1,5 +1,9 @@
 {
     "workbench.editor.enablePreview": true,
+    "workbench.colorCustomizations": {
+        "editorCursor.foreground": "#33ff33",
+        "editorCursor.background": "#000",
+    },
     "editor.fontLigatures": true,
     "editor.lineNumbers": "on",
     "vim.easymotion": true,
@@ -46,6 +50,10 @@
         ,{
             "before": ["g", "u"],  // usages
             "commands": ["editor.action.goToReferences"]
+        }
+        ,{
+            "before": ["v", "v"],  // enter visual block mode
+            "after": ["<C-v>"]
         }
 
         // Leader key mappings
@@ -155,11 +163,4 @@
 
     // Terminal plumbing
     "terminal.integrated.shell.windows": "C:\\Users\\Garrett.DeZeeuw\\AppData\\Local\\Programs\\Git\\bin\\bash.exe",
-    "terminal.integrated.shellArgs.windows": [
-        "--login"
-    ],
-    "editor.tabSize": 2,
-    "editor.wordWrap": "bounded",
-    "editor.wordWrapColumn": 160,
-    "editor.renderWhitespace": "all",
-}
+    "terminal.integrated.she
