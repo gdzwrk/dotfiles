@@ -163,4 +163,13 @@
 
     // Terminal plumbing
     "terminal.integrated.shell.windows": "C:\\Users\\Garrett.DeZeeuw\\AppData\\Local\\Programs\\Git\\bin\\bash.exe",
-    "terminal.integrated.she
+    "terminal.integrated.shellArgs.windows": [
+        "--login"
+    ],
+    "editor.tabSize": 2,
+    "editor.wordWrap": "bounded",
+    "editor.wordWrapColumn": 160,
+    "editor.renderWhitespace": "all",
+    "window.zoomLevel": -1,
+    "workbench.colorTheme": "One Dark Pro",
+}
