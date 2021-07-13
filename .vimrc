@@ -193,16 +193,6 @@ nnoremap <silent> \wnf m`O<Home>{noformat}<Esc>jo<Home>{noformat}<Esc>``
 "}}}2
 "}}}1
 
-"##### FZF bindings be here ##### {{{1
-command! QHist call fzf#vim#search_history({'right': '40'})
-command! CmdHist call fzf#vim#command_history({'right': '40'})
-
-nnoremap <silent> <Leader>0 :Buffers<CR>
-nnoremap <silent> <Leader>f :Files<CR>
-nnoremap <silent> <leader>; :CmdHist<CR>
-nnoremap <silent> <leader>/ :QHist<CR>
-
-"}}}1
 
 "##### Window, buffer & tab management ##### {{{1
 
@@ -436,6 +426,17 @@ call plug#begin('~/.vim/plugged')
     Plug 'christoomey/vim-tmux-navigator'
 call plug#end()
 
+" FZF bindings {{{2
+command! QHist call fzf#vim#search_history({'right': '40'})
+command! CmdHist call fzf#vim#command_history({'right': '40'})
+
+nnoremap <silent> <Leader>0 :Buffers<CR>
+nnoremap <silent> <Leader>f :Files<CR>
+nnoremap <silent> <leader>; :CmdHist<CR>
+nnoremap <silent> <leader>/ :QHist<CR>
+
+"}}}2
+  
 " Easymotion configuration  {{{2
 map , <Plug>(easymotion-prefix)
 " }}}2
