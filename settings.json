@@ -172,4 +172,6 @@
     "editor.renderWhitespace": "all",
     "window.zoomLevel": -1,
     "workbench.colorTheme": "One Dark Pro",
+    "gitlens.views.commits.files.layout": "tree",
+    "diffEditor.renderSideBySide": false,
 }

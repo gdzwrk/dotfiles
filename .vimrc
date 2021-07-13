@@ -14,7 +14,8 @@ set viewdir=~/.vim/view
 set path+=**
 
 "Display/terminal stuff
-set t_Co=256                     "Set terminal color mode to 256
+"set t_Co=256                     "Set terminal color mode to 256
+set t_Co=xterm-256color           "Set terminal color mode to xterm-256
 set listchars=tab:»·,trail:·,space:·,eol:¬                           "Set tab, space, and trailing characters as whitespace characters
 "}}}1
 
@@ -118,14 +119,13 @@ nnoremap <C-r> U
 nnoremap vv <C-v>
 
 "Windows habits die hard
-nnoremap <Leader>a <C-a>
-nnoremap <Leader>x <C-x>
-nnoremap \a <C-a>
-nnoremap \x <C-x>
-nnoremap <C-a> ggVG
+"nnoremap <Leader>a <C-a>
+"nnoremap <Leader>x <C-x>
+"nnoremap \a <C-a>
+"nnoremap \x <C-x>
+"nnoremap <C-a> ggVG
 nnoremap <silent> <C-v> :set paste<CR>P:set nopaste<CR>
 
-vnoremap <C-x> x
 vnoremap <C-c> ygv
 vnoremap <silent> <C-v> :<C-u>set paste<CR>gv"_x"*P:set nopaste<CR>
 
@@ -299,282 +299,6 @@ inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "<C-j>"
 inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "<C-k>"
 "}}}1
 
-"##### Custom Commands and Functions ##### {{{1
-
-"Read shell command into scratch buffer
-command! -nargs=* -complete=shellcmd R vnew | setlocal buftype=nofile bufhidden=hide noswapfile | r !<args>
-
-"Mappings to invoke commands below
-nnoremap \dfms :DateFromMs<CR>
-nnoremap \mstd :DateFromMs<CR>
-
-"Change working directory to current file
-command! Cd :cd %:p:h
-
-"Edit some common files
-command! Eahk :vsp c:\dev\_scripts\dev_keys.ahk
-command! Eiv  :vsp ~/.ideavimrc
-command! Eb   :vsp ~/.bashrc
-command! Ev   :vsp $MYVIMRC
-command! Sv   :so $MYVIMRC
-nnoremap <silent> <F12> :Sv<CR>:echom "Reloaded ~/.vimrc"<CR>
-
-"Random assorted miscellaneous commands
-command! Wsession mksession! ~/.vim/session.vim | echom "Wrote  ~/.vim/session.vim"
-command! Rsession source     ~/.vim/session.vim | echom "Restored ~/.vim/session.vim"
-
-command! Csva     :%CSVArrange
-command! Nom      e ++ff=dos
-command! Mod      :setlocal modifiable
-command! Nomod    :setlocal nomodifiable
-command! Notes    vert topleft sp | vertical resize 50 | setlocal nonumber | edit ~/notes.txt | norm <C-w><C-p>
-command! Logview  vert topleft sp | vertical resize 37 | setlocal nuw=7 | setlocal norelativenumber | setlocal scrollbind | exe ':norm 0<C-w><C-p>' | setlocal scrollbind | exe ':norm 029zl'
-command! Curcolor :echom "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") ."> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"
-command! DateFromMs %s/\v<(\d{10})\d{3}>/\="'".strftime('%c', str2nr(submatch(1)))."'"/g
-
-
-"Bump the statusline up rather than scroll the tabline off the screen
-command! Q        exe 'set cmdheight=3<Bar>redraw<Bar>echo ":q"'    | q   | set cmdheight=1
-command! W        exe 'set cmdheight=3<Bar>redraw<Bar>echo ":w"'    | w   | set cmdheight=1
-command! Bd       exe 'set cmdheight=3<Bar>redraw<Bar>echo ":bd"'   | bd  | set cmdheight=1
-command! Bdp      exe 'set cmdheight=3<Bar>redraw<Bar>echo ":bd#"'  | bd# | set cmdheight=1
-command! Clo      exe 'set cmdheight=3<Bar>redraw<Bar>echo ":clo"'  | clo | set cmdheight=1
-
-"Keep current view and last search intact when invoking a command
-function! Preserve(command)
-  " Preparation: save window state & search
-  let l:saved_winview = winsaveview()
-  let l:saved_search = @/
-
-  " Run the command:
-  execute "silent!" . a:command
-
-  " Clean up: restore previous window position & search
-  call winrestview(l:saved_winview)
-  let @/=l:saved_search
-endfunction
-
-"Strip White Space from line, range, or visual selection with 'sws'
-command! -range Sw <line1>,<line2>call Sw()
-function! Sw()
-    if exists(a:firstline) && exists(a:lastline)
-        call Preserve(a:firstline . "," . a:lastline . "s/\\s\\+$//g")
-    elseif exists(a:firstline) && !exists(a:lastline)
-        call Preserve(a:firstline . ",s/\\s\\+$//g")
-    elseif !exists(a:firstline) && exists(a:lastline)
-        call Preserve("," . a:lastline . "s/\\s\\+$//g")
-    else
-        call Preserve("s/\\s\\+$//g")
-    endif
-endfun
-
-"Grab issue number from branch name and put it on the first line
-command! Fcm      :call FormatCommitMessage()
-function! FormatCommitMessage()
-    g/^# On branch.*\%[\/]\([A-Z]*-[0-9]*\)/exe "co0"
-    1s/^.*\s.\{-}\%[\/]\([a-zA-Z]\+-[0-9]\+\).*$/#\1 /
-endfun
-
-"Show custom notes pane on the left side
-if !exists("g:showNotes")
-    function! ToggleNotes()
-        if @% == 'notes.txt'
-            call HideOrCloseBuffer()
-        else
-            exe 'vert topleft sp <bar> vertical resize 50 <bar> setlocal nonumber <bar> edit ~/notes.txt <bar> norm <C-w><C-p>'
-        endif
-    endfun
-endif
-
-"nnoremap <F12> :call DebugHideOrClose()<CR>
-"fun! DebugHideOrClose()
-"    let buffer_count  = len(getbufinfo({'buflisted':1}))
-"    let tabpage_count = tabpagenr('$')
-"    let window_count  = winnr('$')
-"    echom "tab count: " . l:tabpage_count . "  window count: " . l:window_count . "  buffer count: " . l:buffer_count
-"endfun
-
-fun! HideOrCloseBuffer()
-    let buffer_count  = len(getbufinfo({'buflisted':1}))
-    let tabpage_count = tabpagenr('$')
-    let window_count  = winnr('$')
-
-    "      If there is only one buffer and one window and one tab then close
-    if     l:buffer_count == '1' && l:window_count == '1' && l:tabpage_count == '1'
-        exe 'Bd'
-    "      If there are multiple buffers and only one window and only one tab, then bp|bd#
-    elseif l:buffer_count >= '1' && l:window_count == '1' && l:tabpage_count == '1'
-        exe 'bp|Bdp'
-    else
-        "If there are multiple buffers or multiple windows or multiple tabs, then hide
-        exe 'hide'
-    endif
-    "Special case for closing the [No Name] buffer from an empty tab?
-endfun
-
-fun! FlashCursor()
-    set cursorline cursorcolumn
-    redraw
-    sleep 500m
-    set nocursorline nocursorcolumn
-endfun
-
-fun! FixKeyMappingCase()
-    %s/<\(\a\)-\(\a\)>/<\U\1-\L\2>/g
-    %s/<Leader>/<Leader>/gi
-    %s/<CR>/\<CR\>/gi
-    %s/<Esc>/<Esc>/gi
-endfun
-
-command! Uwk    :call UnwrapKibana()
-fun! UnwrapKibana()
-    "g!/"rawline": "/d
-    "%s/\s\+"rawline": "\(.*\)"/\1/
-    g!/"message": "/d
-    %s/\s\+"message": "\(.*\)"/\1/
-    %s/,$//
-    g/^/m0
-    "sort u
-endfun
-
-command! Jira   :call FormatJiraThread()
-fun! FormatJiraThread()
-    g/Permalink/d
-    g/From SFDC user/d
-    %s/^/    /
-    g/added a comment/norm [ <<
-    norm ggdd
-endfun
-
-nnoremap \d2h :Dec2hex<CR>
-command! -nargs=? -range Dec2hex call s:Dec2hex(<line1>, <line2>, '<args>')
-function! s:Dec2hex(line1, line2, arg) range
-    if empty(a:arg)
-        if histget(':', -1) =~# "^'<,'>" && visualmode() !=# 'V'
-            let cmd = 's/\%V\<\d\+\>/\=printf("0x%x",submatch(0)+0)/g'
-        else
-            let cmd = 's/\<\d\+\>/\=printf("0x%x",submatch(0)+0)/g'
-        endif
-        try
-            execute a:line1 . ',' . a:line2 . cmd
-        catch
-            echo 'Error: No decimal number found'
-        endtry
-    else
-        echo printf('%x', a:arg + 0)
-    endif
-endfunction
-
-nnoremap \fps :call FormatPreparedStatement()<CR>
-vnoremap \fps :call FormatPreparedStatement()<CR>
-"command! -range Fps     <line1>,<line2>call FormatPreparedStatement()
-fun! FormatPreparedStatement() range
-    " New approach to try: do a while loop, looping from the last line to the first. 
-    " 'put' and format each as we go along.
-    " This way each successive statement does not push the next one farther down,  
-    " as the line number of the next-higher statement will not move.
-
-    let sqlPattern = '^.*Prepared SQL: \[\(.\{-}\)\] with parameters \[\(.\{-}\)\]$'
-
-    "echom "firstline: ".a:firstline.", lastline: ".a:lastline
-
-    let curLineNr = a:lastline
-    
-    while curLineNr >= a:firstline
-        let line=getline(curLineNr)
-
-        " Go to the current line number by simply :ex commanding it
-        exe curLineNr
-
-       " Skip line if pattern does not match
-        if match(line, sqlPattern) == -1
-           let curLineNr = curLineNr - 1
-           continue
-            "return
-        endif
-
-        let sqlString=""
-        let paramString=""
-        let sqlString   = matchlist(line, sqlPattern)[1]
-        let paramString = matchlist(line, sqlPattern)[2]
-
-        let params = split(paramString, ",")
-
-        "Substitute each parameter into the string.  null or numeric parameters are not wrapped.
-        "All others (string, date) are wrapped in single quotes.
-        for param in params
-            let param = trim(param)
-            if param =~# '\v^\d+$'
-                let sqlString = substitute(sqlString, '?', param, "")
-            elseif param =~# '\v^null$'
-                let sqlString = substitute(sqlString, '?', param, "")
-            else
-                let sqlString = substitute(sqlString, '?', "'" . param . "'", "")
-            endif
-        endfor
-
-        "Comment out the log line and create an empty line below
-        norm! I--ok
-
-        "Place the contents of the variable into the buffer
-        put =sqlString
-
-        "Format the SQL as best we can
-        call SQLUtilities#SQLU_Formatter(getline('.'))
-
-        let curLineNr = curLineNr - 1
-    endwhile
-endfun
-
-nnoremap \h2d :Hex2dec<CR>
-command! -nargs=? -range Hex2dec call s:Hex2dec(<line1>, <line2>, '<args>')
-function! s:Hex2dec(line1, line2, arg) range
-    if empty(a:arg)
-        if histget(':', -1) =~# "^'<,'>" && visualmode() !=# 'V'
-            let cmd = 's/\%V0x\x\+/\=submatch(0)+0/g'
-        else
-            let cmd = 's/0x\x\+/\=submatch(0)+0/g'
-        endif
-        try
-            execute a:line1 . ',' . a:line2 . cmd
-        catch
-            echo 'Error: No hex number starting "0x" found'
-        endtry
-    else
-        echo (a:arg =~? '^0x') ? a:arg + 0 : ('0x'.a:arg) + 0
-    endif
-endfunction
-
-nnoremap \csb :call CopySearchToNewBuffer()<CR>
-function! CopySearchToNewBuffer()
-    let @n = ''
-    g//yank N
-    enew
-    normal "nPggdd
-    nohl
-endfun
-
-nnoremap <leader>r :call Repl()<cr>
-function! Repl()
-  while 1
-    let expr = input('> ', '', 'expression')
-    if expr == 'q' | break | endif
-    if expr != ''
-      echo "\n"
-      if expr =~ '='
-        execute 'let ' . expr
-      else
-        let ans = eval(expr)
-        echo string(ans)
-      endif
-    endif
-  endwhile
-endfunction
-
-"vnoremap \cb :y<CR> | execute "enew"
-"vnoremap \cb :y | normal enew | P
-"}}}1
-
 "##### Autocommands ##### {{{1
 
 " optional reset cursor on start:
@@ -635,9 +359,13 @@ if has("gui_running") "Define everything for gVim
     "set shellredir=>
     "set shellcmdflag=
 
+    " Start fullscreen
+    autocmd VIMEnter * simalt ~r | simalt ~x
+    
     " Automatically save/restore session
-    autocmd VIMEnter * :source ~/.vim/session.vim | simalt ~r | simalt ~x
-    autocmd VIMLeave * :mksession! ~/.vim/session.vim
+    "autocmd VIMEnter * :source ~/.vim/session.vim | simalt ~r | simalt ~x
+    "autocmd VIMEnter * :source ~/.vim/session.vim | simalt ~r | simalt ~x
+    "autocmd VIMLeave * :mksession! ~/.vim/session.vim
 
     "Change font sizes
     nnoremap <leader>= :let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)+1 > 24 ? 24 : submatch(0)+1)', 'g')<CR>:redraw<CR>:echom "Font:"&gfn<CR>
@@ -683,10 +411,10 @@ call plug#begin('~/.vim/plugged')
 
     Plug 'tpope/vim-characterize'    "Show more char info with ga
     Plug 'tpope/vim-unimpaired'      "Set a bunch of sane defaults? I think?
+    Plug 'tpope/vim-vinegar'         "Make netrw more useable
     Plug 'tpope/vim-fugitive'        "Git plugin
     Plug 'tpope/vim-surround'        "Surround with things
     Plug 'tpope/vim-abolish'         "Fix things, change text? Not being used much
- "   Plug 'tpope/vim-dadbod'
     Plug 'tpope/vim-repeat'          "Allow repeating non-builtin commands
     Plug 'tpope/vim-jdaddy'          "Don't remember?
 
@@ -709,22 +437,7 @@ call plug#begin('~/.vim/plugged')
 call plug#end()
 
 " Easymotion configuration  {{{2
-"map , <Plug>(easymotion-prefix)
-"map ,, <Plug>(easymotion-s)
-"
-"map  ,/ <Plug>(easymotion-sn)
-"omap ,/ <Plug>(easymotion-tn)
-"map  ,? <Plug>(easymotion-sn)
-"omap ,? <Plug>(easymotion-tn)
-"
-"nmap s <Plug>(easymotion-s2)
-"nmap t <Plug>(easymotion-t2)
-
-" These `n` & `N` mappings are options. You do not have to map `n` & `N` to EasyMotion.
-" Without these mappings, `n` & `N` works fine. (These mappings just provide
-" different highlight method and have some other features )
-" map  n <Plug>(easymotion-next)
-" map  N <Plug>(easymotion-prev)
+map , <Plug>(easymotion-prefix)
 " }}}2
 
 " Airline Configuration  {{{2
@@ -743,10 +456,10 @@ let g:airline#extensions#tabline#fnamecollapse = 1
 "call airline#parts#define_accent('maxlinenr', 'none')
 "}}}2
 
-"auto-origami - display foldcolumn only when folds are present
+" auto-origami - display foldcolumn only when folds are present
 let g:auto_origami_foldcolumn = 3
 
-"Netrw fixer-uppers
+" Netrw fixer-uppers
 let g:netrw_banner = 0
 let g:netrw_liststyle = 3
 let g:netrw_browse_split = 4
@@ -754,23 +467,5 @@ let g:netrw_altv = 1
 let g:netrw_winsize = 25
 "}}}1
 
-" ##### highlights key mapping ##### {{{1
-" highlights.vim mappings:
-
-    "for i in range(1, 9)
-    "  execute 'vnoremap <silent> \'.i.' :<C-U>call <SID>DoHighlight('.i.', 1, v:count)<CR>'
-    "  execute 'nnoremap <silent> \'.i.' :<C-U>call <SID>DoHighlight('.i.', 2, v:count)<CR>'
-    "endfor
-
-    "vnoremap <silent> \0 :<C-U>call <SID>UndoHighlight(1)<CR>
-    "nnoremap <silent> \0 :<C-U>call <SID>UndoHighlight(2)<CR>
-    "nnoremap <silent> \- :call <SID>WindowMatches(0)<CR>
-    "nnoremap <silent> \+ :call <SID>WindowMatches(1)<CR>
-    "nnoremap <silent> \* :call <SID>WindowMatches(2)<CR>
-    "nnoremap <silent> <c-n> :call <SID>Search(0)<CR>
-    "nnoremap <silent> <c-p> :call <SID>Search(1)<CR>
-    "nnoremap <silent> \n :let @/=<SID>Search(0)<CR>
-    "nnoremap <silent> \N :let @/=<SID>Search(1)<CR>
-
-    "nnoremap <silent> \\ :call <SID>MatchToggle()<CR>
-    "vnoremap <silent> \\ <Esc>:call <SID>MatchToggle()<CR>gv
+" ##### Machine-specific configuration #####
+source ~/.localrc

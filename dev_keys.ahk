@@ -597,19 +597,19 @@ return
     }
 return
 
-;;;;; Slack
+;;;;; Discord
 ~CapsLock & s::
 ~] & s::
     other_key_pressed := 1
-    if WinExist("Slack.*Calabrio") {
+    if WinExist("Discord") {
         WinActivate
     }
 return
 
-#IfWinActive ahk_exe slack.exe
-CapsLock & [::!Left
-CapsLock & ]::!Right
-#IfWinActive
+;#IfWinActive ahk_exe slack.exe
+;CapsLock & [::!Left
+;CapsLock & ]::!Right
+;#IfWinActive
 
 ;;;;; IntelliJ
 ~CapsLock & d::

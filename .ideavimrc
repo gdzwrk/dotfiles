@@ -169,10 +169,6 @@ nnoremap \col      :action JumpToColorsAndFonts<CR>
 "Git related
 nnoremap \cb       :action Git.CompareWithBranch<CR>
 
-"Need these since C-A and C-X are Windows'd.
-nnoremap \=        <c-a>
-nnoremap \-        <c-x>
-
 "Tool window mappings (don't work yet)
 "nnoremap \v              :action ActivateVersionControlToolWindow<CR>
 "nnoremap \g              :action ActivateGradleToolWindow<CR>
@@ -226,7 +222,7 @@ vnoremap d "dd
 "nnoremap <c-a> ggVG
 "vnoremap <c-x> d
 "vnoremap <c-c> y
-nnoremap <c-v> p
+"nnoremap <c-v> p
 vnoremap <c-v> <Esc>:set paste<CR>P:set nopaste<CR>gv
 inoremap <c-v> <Esc>:set paste<CR>P:set nopaste<CR>a
 
