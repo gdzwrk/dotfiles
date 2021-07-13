@@ -451,12 +451,6 @@ let g:airline#extensions#tabline#fnamemod = ':~:.'
 "let g:airline#extensions#tabline#fnamemod = ':p:~'
 let g:airline#extensions#tabline#fnamecollapse = 1
 
-" Remove the 'bold' escape code for certain status line elements to fix rendering of vim-airline in tmux
-"call airline#parts#define_accent('mode', 'none')
-"call airline#parts#define_accent('linenr', 'none')
-"call airline#parts#define_accent('maxlinenr', 'none')
-"}}}2
-
 " auto-origami - display foldcolumn only when folds are present
 let g:auto_origami_foldcolumn = 3
 
