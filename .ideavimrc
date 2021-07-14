@@ -145,15 +145,16 @@ nnoremap <a-.>     :action com.mnw.tabmover.actions.MoveTabDownAction<CR>
 nnoremap \an       :action Annotate<CR>
 nnoremap \rn       :set relativenumber!<CR>
 nnoremap \nu       :action EditorToggleShowLineNumbers<CR>
+nnoremap \oim      :action OptimizeImports<CR>
+nnoremap \ic       :action IntroduceConstant<CR>
+vnoremap \ic       :action IntroduceConstant<CR>
 
 nnoremap \us       :action Unsplit<CR>
 nnoremap \vs       :vsp<CR>
 nnoremap \sp       :sp<CR>
-
 nnoremap \cao      :action CloseAllEditorsButActive<CR>
 nnoremap \cl       :action CloseAllToTheLeft<CR>
 nnoremap \cr       :action CloseAllToTheRight<CR>
-
 nnoremap \gl       :action CodeGlance.toggle<CR>
 nnoremap \wr       :action EditorToggleUseSoftWraps<CR>
 nnoremap \ws       :action EditorToggleShowWhitespaces<CR>
@@ -161,7 +162,6 @@ nnoremap \ws       :action EditorToggleShowWhitespaces<CR>
 nnoremap \h        :action Vcs.ShowTabbedFileHistory<CR>
 nnoremap \lh       :action LocalHistory.ShowHistory<CR>
 nnoremap \lc       :action Vcs.Show.Local.Changes<cr>
-nnoremap \oim      :action OptimizeImports<CR>
 nnoremap \str      :action StreamTracerAction<CR>
 
 nnoremap \col      :action JumpToColorsAndFonts<CR>

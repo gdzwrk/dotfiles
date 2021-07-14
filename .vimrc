@@ -7,15 +7,15 @@ set encoding=utf-8
 set runtimepath+=~/.vim/         "Share plugin directory between terminal vim and gVim
 let g:netrw_home="~/.vim/"       "Put .netrwhist with everything else
 "set directory^=$HOME/.vim/swapfiles//
-set directory=$HOME/.vim/swapfiles//,.
+set directory=.,$HOME/.vim/swapfiles//
 set undodir=~/.vim/undodir
 set undofile
 set viewdir=~/.vim/view
 set path+=**
 
 "Display/terminal stuff
-"set t_Co=256                     "Set terminal color mode to 256
-set t_Co=xterm-256color           "Set terminal color mode to xterm-256
+set t_Co=256                     "Set terminal color mode to 256
+"set t_Co=xterm-256color           "Set terminal color mode to xterm-256
 set listchars=tab:»·,trail:·,space:·,eol:¬                           "Set tab, space, and trailing characters as whitespace characters
 "}}}1
 
@@ -344,38 +344,38 @@ if has("gui_running") "Define everything for gVim
     set shellpipe=>
     set guifont=DejaVu_Sans_Mono_for_Powerline:h12:cANSI:qDRAFT
 
+    autocmd VIMEnter * simalt ~r | simalt ~x
+    
+    "Change font sizes
+    nnoremap <leader>= :let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)+1 > 24 ? 24 : submatch(0)+1)', 'g')<CR>:redraw<CR>:echom "Font:"&gfn<CR>
+    nnoremap <leader>- :let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)-1 < 6 ? 6 : submatch(0)-1)', 'g')<CR>:redraw<CR>:echom "Font:"&gfn<CR>
+
     "set shell=wsl.exe
     "set shellpipe=|
     "set shellredir=>
     "set shellcmdflag=
 
-    " Start fullscreen
-    autocmd VIMEnter * simalt ~r | simalt ~x
-    
     " Automatically save/restore session
     "autocmd VIMEnter * :source ~/.vim/session.vim | simalt ~r | simalt ~x
     "autocmd VIMEnter * :source ~/.vim/session.vim | simalt ~r | simalt ~x
     "autocmd VIMLeave * :mksession! ~/.vim/session.vim
 
-    "Change font sizes
-    nnoremap <leader>= :let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)+1 > 24 ? 24 : submatch(0)+1)', 'g')<CR>:redraw<CR>:echom "Font:"&gfn<CR>
-    nnoremap <leader>- :let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)-1 < 6 ? 6 : submatch(0)-1)', 'g')<CR>:redraw<CR>:echom "Font:"&gfn<CR>
 
 else   "Define anything that should only execute when not using gVim
-    if &term == "xterm-256color" "This is for git-bash
-        set term=builtin_xterm
-        echom "In builtin_xterm mode"
-
-        "Change font sizes
-        "nnoremap <c-=> :silent! let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)+1 > 24 ? 24 : submatch(0)+1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
-        "nnoremap <c--> :silent! let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)-1 < 6 ? 6 : submatch(0)-1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
-
-        "Format JSON via python
-        "nnoremap =j :%!python -m json.tool<CR>
-    else "Set for tmux
-        set term=tmux-256color
-        echom "In tmux-256color mode"
-    endif
+"    if &term == "xterm-256color" "This is for git-bash
+"        "set term=builtin_xterm
+"        "echom "In builtin_xterm mode"
+"
+"        "Change font sizes
+"        "nnoremap <c-=> :silent! let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)+1 > 24 ? 24 : submatch(0)+1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
+"        "nnoremap <c--> :silent! let &guifont = substitute(&guifont, ':h\zs\d\+', '\=eval(submatch(0)-1 < 6 ? 6 : submatch(0)-1)', 'g')<CR>:call MaintainFullscreen()<CR>:redraw<CR>:echom "Font:"&gfn<CR>
+"
+"        "Format JSON via python
+"        "nnoremap =j :%!python -m json.tool<CR>
+"    else "Set for tmux
+"        set term=tmux-256color
+"        echom "In tmux-256color mode"
+"    endif
 
     set shell=bash
     set shellpipe=|
